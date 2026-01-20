@@ -3,14 +3,14 @@ export const galleryImages = [
         id: 1,
         title: 'Completed Bridge Project',
         category: 'Infrastructure',
-        image: 'https://images.unsplash.com/photo-1510253687831-0f982d7862fc?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1758383965517-4fe688c69ed2?w=800&q=80',
         description: 'Modern bridge construction over river'
     },
     {
         id: 2,
         title: 'Residential Home',
         category: 'Construction',
-        image: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1768200498972-fd56353d73fc?w=800&q=80',
         description: 'Beautiful family home completed in 2025'
     },
     {
@@ -31,7 +31,7 @@ export const galleryImages = [
         id: 5,
         title: 'Culvert System',
         category: 'Infrastructure',
-        image: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1758383965517-4fe688c69ed2?w=800&q=80',
         description: 'Drainage culvert installation'
     },
     {
@@ -42,4 +42,5 @@ export const galleryImages = [
         description: 'Colorful flower garden arrangement'
     }
 ];
+
 
