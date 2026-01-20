@@ -1,0 +1,123 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+
+const HeroBanner = () => {
+    const [currentSlide, setCurrentSlide] = useState(0);
+
+    const slides = [
+        {
+            image: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1200',
+            title: 'Building Dreams, Growing Futures',
+            subtitle: 'Quality agricultural and construction solutions',
+            cta: 'Explore Products',
+            link: '/products'
+        },
+        {
+            image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1200',
+            title: 'Premium Trees & Plants',
+            subtitle: 'Orchard trees, natural trees, and beautiful flowers',
+            cta: 'View Products',
+            link: '/products'
+        },
+        {
+            image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1200',
+            title: 'Professional Construction Services',
+            subtitle: 'Bridges, houses, and culvert systems',
+            cta: 'Our Services',
+            link: '/services'
+        },
+        {
+            image: 'https://images.unsplash.com/photo-1558904541-efa843a96f01?w=1200',
+            title: 'Transform Your Outdoor Space',
+            subtitle: 'Expert landscaping and garden design',
+            cta: 'Book Now',
+            link: '/booking'
+        }
+    ];
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentSlide((prev) => (prev + 1) % slides.length);
+        }, 5000);
+
+        return () => clearInterval(timer);
+    }, [slides.length]);
+
+    const nextSlide = () => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+    };
+
+    const prevSlide = () => {
+        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    };
+
+    return (
+        <div className="relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden rounded-2xl mx-4 mt-4">
+            {/* Slides */}
+            {slides.map((slide, index) => (
+                <div
+                    key={index}
+                    className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'
+                        }`}
+                >
+                    <img
+                        src={slide.image}
+                        alt={slide.title}
+                        className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30" />
+
+                    {/* Content */}
+                    <div className="absolute inset-0 flex items-center justify-center text-center px-4">
+                        <div className="max-w-4xl animate-fade-in">
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 font-display drop-shadow-lg">
+                                {slide.title}
+                            </h1>
+                            <p className="text-xl md:text-2xl text-gray-200 mb-8 drop-shadow-md">
+                                {slide.subtitle}
+                            </p>
+                            <Link
+                                to={slide.link}
+                                className="inline-block bg-accent-700 hover:bg-accent-800 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl"
+                            >
+                                {slide.cta}
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            ))}
+
+            {/* Navigation Arrows */}
+            <button
+                onClick={prevSlide}
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-300"
+                aria-label="Previous slide"
+            >
+                <FaChevronLeft className="text-2xl" />
+            </button>
+            <button
+                onClick={nextSlide}
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-300"
+                aria-label="Next slide"
+            >
+                <FaChevronRight className="text-2xl" />
+            </button>
+
+            {/* Indicators */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-2">
+                {slides.map((_, index) => (
+                    <button
+                        key={index}
+                        onClick={() => setCurrentSlide(index)}
+                        className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-white w-8' : 'bg-white/50'
+                            }`}
+                        aria-label={`Go to slide ${index + 1}`}
+                    />
+                ))}
+            </div>
+        </div>
+    );
+};
+
+export default HeroBanner;
