@@ -31,7 +31,7 @@ const About = () => {
                 <div className="text-center mb-16 animate-fade-in">
                     <h1 className="text-primary-800 mb-4 font-display">About Ahlam Jamila Investment</h1>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                        Building dreams and growing futures since 2010
+                        Building dreams and growing futures since 2010.
                     </p>
                 </div>
 
