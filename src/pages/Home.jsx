@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 import HeroBanner from '../components/HeroBanner';
 import AnimatedCounter from '../components/AnimatedCounter';
 import { FaTree, FaHammer, FaSeedling, FaArrowRight, FaCheckCircle, FaImages } from 'react-icons/fa';
+import { API_BASE } from '../config';
 
 const Home = () => {
     const [recentProjects, setRecentProjects] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/gallery')
+        fetch(`${API_BASE}/gallery`)
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
@@ -25,12 +26,12 @@ const Home = () => {
             description: 'Premium trees, plants, and construction materials'
         },
         {
-            icon: <FaHammer className="text-4xl text-primary-600" />,
+            icon: <FaHammer className="text-4xl text-secondary-600" />,
             title: 'Expert Services',
             description: 'Professional construction and landscaping solutions'
         },
         {
-            icon: <FaSeedling className="text-4xl text-primary-600" />,
+            icon: <FaSeedling className="text-4xl text-accent-700" />,
             title: 'Sustainable Growth',
             description: 'Environmentally conscious practices and materials'
         }

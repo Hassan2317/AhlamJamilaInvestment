@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaUser, FaEnvelope, FaPhone, FaCalendar, FaClipboardList } from 'react-icons/fa';
+import { API_BASE } from '../config';
 
 const BookingForm = () => {
     const [formData, setFormData] = useState({
@@ -17,8 +18,8 @@ const BookingForm = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [services, setServices] = useState([]);
 
-    useState(() => {
-        fetch('http://localhost:5000/api/services')
+    useEffect(() => {
+        fetch(`${API_BASE}/services`)
             .then(res => res.json())
             .then(data => {
                 if (data.success && data.data.length > 0) {
@@ -50,7 +51,7 @@ const BookingForm = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://localhost:5000/api/booking', {
+            const response = await fetch(`${API_BASE}/booking`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

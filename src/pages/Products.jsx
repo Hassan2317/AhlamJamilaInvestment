@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import ProductCard from '../components/ProductCard';
 import { products as staticProducts } from '../data/products';
+import { API_BASE } from '../config';
 
 const Products = () => {
     const [products, setProducts] = useState(staticProducts);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/products')
+        fetch(`${API_BASE}/products`)
             .then(res => res.json())
             .then(data => {
                 if (data.success) {

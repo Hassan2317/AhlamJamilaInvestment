@@ -18,11 +18,11 @@ const Footer = () => {
     ];
 
     return (
-        <footer className="bg-gradient-to-br from-secondary-800 to-secondary-900 text-white mt-16">
-            <div className="container mx-auto px-4 py-8">
+        <footer className="bg-gradient-to-br from-secondary-800 to-secondary-900 text-white mt-8">
+            <div className="container mx-auto px-4 py-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {/* Company Info */}
-                    <div className="space-y-4">
+                    <div className="space-y-2">
                         <div className="flex items-center space-x-2">
                             <div className="bg-primary-600 p-2 rounded-lg shadow-lg">
                                 <FaLeaf className="text-white text-xl" />
@@ -53,8 +53,8 @@ const Footer = () => {
 
                     {/* Quick Links */}
                     <div>
-                        <h4 className="text-lg font-semibold mb-6 font-display border-b border-primary-500/30 pb-2 inline-block">Quick Links</h4>
-                        <ul className="space-y-3">
+                        <h4 className="text-lg font-semibold mb-2 font-display border-b border-primary-500/30 pb-1 inline-block">Quick Links</h4>
+                        <ul className="space-y-1">
                             {quickLinks.map((link) => (
                                 <li key={link.path}>
                                     <Link
@@ -71,8 +71,8 @@ const Footer = () => {
 
                     {/* Services */}
                     <div>
-                        <h4 className="text-lg font-semibold mb-6 font-display border-b border-primary-500/30 pb-2 inline-block">Our Services</h4>
-                        <ul className="space-y-3">
+                        <h4 className="text-lg font-semibold mb-2 font-display border-b border-primary-500/30 pb-1 inline-block">Our Services</h4>
+                        <ul className="space-y-1">
                             {serviceLinks.map((link) => (
                                 <li key={link.path}>
                                     <Link
@@ -89,8 +89,8 @@ const Footer = () => {
 
                     {/* Contact Info */}
                     <div>
-                        <h4 className="text-lg font-semibold mb-6 font-display border-b border-primary-500/30 pb-2 inline-block">Contact Us</h4>
-                        <ul className="space-y-4">
+                        <h4 className="text-lg font-semibold mb-2 font-display border-b border-primary-500/30 pb-1 inline-block">Contact Us</h4>
+                        <ul className="space-y-2">
                             <li className="flex items-start space-x-3 text-gray-400">
                                 <FaMapMarkerAlt className="text-accent-500 mt-1 flex-shrink-0" />
                                 <span className="text-sm">Zomba, Malawi</span>
@@ -112,7 +112,7 @@ const Footer = () => {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="border-t border-white/10 mt-12 pt-6 text-center">
+                <div className="border-t border-white/10 mt-4 pt-4 text-center">
                     <p className="text-gray-500 text-xs">
                         &copy; {currentYear} Ahlam Jamila Investment. All rights reserved.
                     </p>

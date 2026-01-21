@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import GalleryGrid from '../components/GalleryGrid';
 import { galleryImages as staticGallery } from '../data/gallery';
+import { API_BASE } from '../config';
 
 const Gallery = () => {
     const [images, setImages] = useState(staticGallery);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/gallery')
+        fetch(`${API_BASE}/gallery`)
             .then(res => res.json())
             .then(data => {
                 if (data.success) {

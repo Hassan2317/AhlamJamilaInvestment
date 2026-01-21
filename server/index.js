@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
+const path = require('path');
 const Booking = require('./models/Booking');
 const Contact = require('./models/Contact');
 const Product = require('./models/Product');
@@ -15,6 +16,9 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../dist')));
 
 // Database Connection
 mongoose.connect(process.env.MONGODB_URI)
@@ -31,7 +35,7 @@ const transporter = nodemailer.createTransport({
         pass: process.env.SMTP_PASS
     },
     tls: {
-        rejectUnauthorized: false // Helps avoid local certificate issues
+        rejectUnauthorized: false // Helps avoid local certificate issues.
     }
 });
 
@@ -293,6 +297,12 @@ app.post('/api/admin/seed', adminAuth, async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
+});
+
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*all', (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
 app.listen(PORT, () => {

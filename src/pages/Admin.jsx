@@ -3,6 +3,7 @@ import { FaCalendarAlt, FaEnvelope, FaTrash, FaCheckCircle, FaChartLine, FaLock,
 import { products as staticProducts } from '../data/products';
 import { galleryImages as staticGallery } from '../data/gallery';
 import { services as staticServices } from '../data/services';
+import { API_BASE, ADMIN_API } from '../config';
 
 const Admin = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -16,12 +17,8 @@ const Admin = () => {
     const [activeTab, setActiveTab] = useState('bookings');
     const [error, setError] = useState('');
 
-    // Form States
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState({});
-
-    const API_BASE = 'http://localhost:5000/api';
-    const ADMIN_API = 'http://localhost:5000/api/admin';
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -313,7 +310,12 @@ const Admin = () => {
 // --- Sub-Components ---
 
 const StatCard = ({ icon, label, val, color }) => (
-    <div className="glass p-6 rounded-2xl flex items-center gap-4 border-b-4 border-primary-500">
+    <div className={`glass p-6 rounded-2xl flex items-center gap-4 border-b-4 ${color === 'blue' ? 'border-blue-500' :
+        color === 'green' ? 'border-green-500' :
+            color === 'orange' ? 'border-orange-500' :
+                color === 'purple' ? 'border-purple-500' :
+                    'border-pink-500'
+        }`}>
         <div className={`bg-${color}-100 p-4 rounded-xl text-${color}-600`}>{icon}</div>
         <div>
             <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider">{label}</p>

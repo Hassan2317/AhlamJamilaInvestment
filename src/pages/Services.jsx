@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import ServiceCard from '../components/ServiceCard';
 import { services as staticServices } from '../data/services';
 import { Link } from 'react-router-dom';
+import { API_BASE } from '../config';
 
 const Services = () => {
     const [services, setServices] = useState(staticServices);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/services')
+        fetch(`${API_BASE}/services`)
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
@@ -27,7 +28,7 @@ const Services = () => {
             <div className="container mx-auto">
                 {/* Header */}
                 <div className="text-center mb-12 animate-fade-in text-reveal">
-                    <h1 className="text-secondary-800 mb-4 font-display">Our Professional Services</h1>
+                    <h1 className="text-primary-800 mb-4 font-display">Our Professional Services</h1>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                         Professional construction and landscaping services delivered by experienced experts.
                         We turn your vision into reality with quality workmanship and attention to detail.

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FaUser, FaEnvelope, FaPaperPlane } from 'react-icons/fa';
+import { API_BASE } from '../config';
 
 const ContactForm = () => {
     const [formData, setFormData] = useState({
@@ -35,7 +36,7 @@ const ContactForm = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://localhost:5000/api/contact', {
+            const response = await fetch(`${API_BASE}/contact`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

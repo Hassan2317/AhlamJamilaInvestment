@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import BookingForm from '../components/BookingForm';
 import { FaCheckCircle, FaPhone, FaEnvelope, FaClock } from 'react-icons/fa';
+import { API_BASE } from '../config';
 
 const Booking = () => {
     const [dbServices, setDbServices] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/services')
+        fetch(`${API_BASE}/services`)
             .then(res => res.json())
             .then(data => {
                 if (data.success && data.data.length > 0) {
