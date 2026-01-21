@@ -1,20 +1,28 @@
 import { useState, useEffect } from 'react';
-import { FaCalendarAlt, FaEnvelope, FaTrash, FaCheckCircle, FaChartLine, FaLock, FaSignOutAlt } from 'react-icons/fa';
+import { FaCalendarAlt, FaEnvelope, FaTrash, FaCheckCircle, FaChartLine, FaLock, FaSignOutAlt, FaPlus, FaBox, FaImages, FaSeedling } from 'react-icons/fa';
+import { products as staticProducts } from '../data/products';
+import { galleryImages as staticGallery } from '../data/gallery';
 
 const Admin = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [password, setPassword] = useState('');
     const [bookings, setBookings] = useState([]);
     const [contacts, setContacts] = useState([]);
+    const [products, setProducts] = useState([]);
+    const [gallery, setGallery] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('bookings');
     const [error, setError] = useState('');
 
-    const API_BASE = 'http://localhost:5000/api/admin';
+    // Form States
+    const [showForm, setShowForm] = useState(false);
+    const [formData, setFormData] = useState({});
+
+    const API_BASE = 'http://localhost:5000/api';
+    const ADMIN_API = 'http://localhost:5000/api/admin';
 
     const handleLogin = (e) => {
         e.preventDefault();
-        // For simplicity, we check directly. In production, this would be a real session/token.
         if (password === 'admin123') {
             setIsAuthenticated(true);
             setError('');
@@ -47,16 +55,22 @@ const Admin = () => {
         setLoading(true);
         try {
             const adminKey = sessionStorage.getItem('adminKey');
-            const [bookingsRes, contactsRes] = await Promise.all([
-                fetch(`${API_BASE}/bookings`, { headers: { 'password': adminKey } }),
-                fetch(`${API_BASE}/contacts`, { headers: { 'password': adminKey } })
+            const [bookingsRes, contactsRes, productsRes, galleryRes] = await Promise.all([
+                fetch(`${ADMIN_API}/bookings`, { headers: { 'password': adminKey } }),
+                fetch(`${ADMIN_API}/contacts`, { headers: { 'password': adminKey } }),
+                fetch(`${API_BASE}/products`),
+                fetch(`${API_BASE}/gallery`)
             ]);
 
-            const bookingsData = await bookingsRes.json();
-            const contactsData = await contactsRes.json();
+            const bJson = await bookingsRes.json();
+            const cJson = await contactsRes.json();
+            const pJson = await productsRes.json();
+            const gJson = await galleryRes.json();
 
-            if (bookingsData.success) setBookings(bookingsData.data);
-            if (contactsData.success) setContacts(contactsData.data);
+            if (bJson.success) setBookings(bJson.data);
+            if (cJson.success) setContacts(cJson.data);
+            if (pJson.success) setProducts(pJson.data);
+            if (gJson.success) setGallery(gJson.data);
         } catch (err) {
             console.error('Fetch error:', err);
         } finally {
@@ -64,10 +78,81 @@ const Admin = () => {
         }
     };
 
+    const handleSeed = async () => {
+        if (!window.confirm('This will replace current database products/gallery with static data. Proceed?')) return;
+        try {
+            const adminKey = sessionStorage.getItem('adminKey');
+            const res = await fetch(`${ADMIN_API}/seed`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'password': adminKey
+                },
+                body: JSON.stringify({
+                    products: staticProducts.map(({ id, ...rest }) => rest),
+                    gallery: staticGallery.map(({ id, ...rest }) => rest)
+                })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('Database seeded successfully!');
+                fetchData();
+            }
+        } catch (err) {
+            console.error('Seed error:', err);
+        }
+    };
+
+    const handleSubmitCMS = async (e) => {
+        e.preventDefault();
+        const adminKey = sessionStorage.getItem('adminKey');
+        const endpoint = activeTab === 'products' ? 'products' : 'gallery';
+
+        try {
+            const res = await fetch(`${ADMIN_API}/${endpoint}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'password': adminKey
+                },
+                body: JSON.stringify(formData)
+            });
+            const data = await res.json();
+            if (data.success) {
+                if (activeTab === 'products') setProducts([data.data, ...products]);
+                else setGallery([data.data, ...gallery]);
+                setShowForm(false);
+                setFormData({});
+            }
+        } catch (err) {
+            console.error('Submit error:', err);
+        }
+    };
+
+    const deleteItem = async (type, id) => {
+        if (!window.confirm('Are you sure you want to delete this?')) return;
+        try {
+            const adminKey = sessionStorage.getItem('adminKey');
+            const res = await fetch(`${ADMIN_API}/${type}/${id}`, {
+                method: 'DELETE',
+                headers: { 'password': adminKey }
+            });
+            const data = await res.json();
+            if (data.success) {
+                if (type === 'bookings') setBookings(bookings.filter(b => b._id !== id));
+                else if (type === 'contacts') setContacts(contacts.filter(c => c._id !== id));
+                else if (type === 'products') setProducts(products.filter(p => p._id !== id));
+                else if (type === 'gallery') setGallery(gallery.filter(g => g._id !== id));
+            }
+        } catch (err) {
+            console.error('Delete error:', err);
+        }
+    };
+
     const updateBookingStatus = async (id, newStatus) => {
         try {
             const adminKey = sessionStorage.getItem('adminKey');
-            const res = await fetch(`${API_BASE}/bookings/${id}`, {
+            const res = await fetch(`${ADMIN_API}/bookings/${id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -81,27 +166,6 @@ const Admin = () => {
             }
         } catch (err) {
             console.error('Update error:', err);
-        }
-    };
-
-    const deleteItem = async (type, id) => {
-        if (!window.confirm('Are you sure you want to delete this?')) return;
-        try {
-            const adminKey = sessionStorage.getItem('adminKey');
-            const res = await fetch(`${API_BASE}/${type}/${id}`, {
-                method: 'DELETE',
-                headers: { 'password': adminKey }
-            });
-            const data = await res.json();
-            if (data.success) {
-                if (type === 'bookings') {
-                    setBookings(bookings.filter(b => b._id !== id));
-                } else {
-                    setContacts(contacts.filter(c => c._id !== id));
-                }
-            }
-        } catch (err) {
-            console.error('Delete error:', err);
         }
     };
 
@@ -140,170 +204,88 @@ const Admin = () => {
         <div className="section-padding min-h-screen">
             <div className="container mx-auto">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
-                    <h1 className="text-4xl font-bold text-primary-800 font-display">Business Dashboard</h1>
-                    <button onClick={handleLogout} className="btn-outline flex items-center gap-2">
-                        <FaSignOutAlt /> Logout
-                    </button>
+                    <h1 className="text-4xl font-bold text-primary-800 font-display">Admin CMS</h1>
+                    <div className="flex gap-4">
+                        <button onClick={handleSeed} className="btn-outline flex items-center gap-2 text-xs py-2">
+                            <FaSeedling /> Initial Migration
+                        </button>
+                        <button onClick={handleLogout} className="btn-outline flex items-center gap-2 text-xs py-2 border-red-200 text-red-600 hover:bg-red-50">
+                            <FaSignOutAlt /> Logout
+                        </button>
+                    </div>
                 </div>
 
                 {/* Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                    <div className="glass p-6 rounded-2xl flex items-center gap-4">
-                        <div className="bg-blue-100 p-4 rounded-xl text-blue-600">
-                            <FaCalendarAlt className="text-2xl" />
-                        </div>
-                        <div>
-                            <p className="text-gray-600 text-sm">Total Bookings</p>
-                            <h3 className="text-2xl font-bold">{bookings.length}</h3>
-                        </div>
-                    </div>
-                    <div className="glass p-6 rounded-2xl flex items-center gap-4">
-                        <div className="bg-green-100 p-4 rounded-xl text-green-600">
-                            <FaEnvelope className="text-2xl" />
-                        </div>
-                        <div>
-                            <p className="text-gray-600 text-sm">New Inquiries</p>
-                            <h3 className="text-2xl font-bold">{contacts.length}</h3>
-                        </div>
-                    </div>
-                    <div className="glass p-6 rounded-2xl flex items-center gap-4">
-                        <div className="bg-purple-100 p-4 rounded-xl text-purple-600">
-                            <FaChartLine className="text-2xl" />
-                        </div>
-                        <div>
-                            <p className="text-gray-600 text-sm">Pending Conversion</p>
-                            <h3 className="text-2xl font-bold">
-                                {bookings.filter(b => b.status === 'Pending').length}
-                            </h3>
-                        </div>
-                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+                    <StatCard icon={<FaCalendarAlt />} label="Bookings" val={bookings.length} color="blue" />
+                    <StatCard icon={<FaEnvelope />} label="Inquiries" val={contacts.length} color="green" />
+                    <StatCard icon={<FaBox />} label="Products" val={products.length} color="orange" />
+                    <StatCard icon={<FaImages />} label="Gallery" val={gallery.length} color="purple" />
                 </div>
 
                 {/* Tabs */}
-                <div className="flex gap-4 mb-8">
-                    <button
-                        onClick={() => setActiveTab('bookings')}
-                        className={`px-6 py-2 rounded-xl font-bold transition-all ${activeTab === 'bookings' ? 'bg-primary-700 text-white shadow-lg' : 'glass text-gray-700'}`}
-                    >
-                        Bookings
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('contacts')}
-                        className={`px-6 py-2 rounded-xl font-bold transition-all ${activeTab === 'contacts' ? 'bg-primary-700 text-white shadow-lg' : 'glass text-gray-700'}`}
-                    >
-                        Inquiries
-                    </button>
+                <div className="flex flex-wrap gap-2 mb-8 bg-white/20 p-2 rounded-2xl backdrop-blur-sm">
+                    {['bookings', 'contacts', 'products', 'gallery'].map(t => (
+                        <button
+                            key={t}
+                            onClick={() => { setActiveTab(t); setShowForm(false); }}
+                            className={`px-6 py-2 rounded-xl font-bold transition-all capitalize ${activeTab === t ? 'bg-primary-700 text-white shadow-lg' : 'hover:bg-white/40 text-gray-700'}`}
+                        >
+                            {t}
+                        </button>
+                    ))}
                 </div>
 
-                {/* Content */}
-                <div className="glass rounded-2xl overflow-hidden animate-fade-in">
+                {/* Content Header */}
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-2xl font-bold text-primary-800 capitalize">{activeTab} List</h2>
+                    {(activeTab === 'products' || activeTab === 'gallery') && (
+                        <button
+                            onClick={() => setShowForm(!showForm)}
+                            className="btn-primary flex items-center gap-2 py-2 px-4 text-sm"
+                        >
+                            <FaPlus /> Add New {activeTab === 'products' ? 'Product' : 'Image'}
+                        </button>
+                    )}
+                </div>
+
+                {/* Dynamic Form */}
+                {showForm && (
+                    <div className="glass p-8 rounded-2xl mb-8 animate-slide-up">
+                        <form onSubmit={handleSubmitCMS} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {activeTab === 'products' ? (
+                                <>
+                                    <input type="text" placeholder="Name" required onChange={e => setFormData({ ...formData, name: e.target.value })} />
+                                    <input type="text" placeholder="Category" required onChange={e => setFormData({ ...formData, category: e.target.value })} />
+                                    <input type="text" placeholder="Image URL" required onChange={e => setFormData({ ...formData, image: e.target.value })} />
+                                    <textarea placeholder="Description" onChange={e => setFormData({ ...formData, description: e.target.value })} className="md:col-span-2" />
+                                </>
+                            ) : (
+                                <>
+                                    <input type="text" placeholder="Title" required onChange={e => setFormData({ ...formData, title: e.target.value })} />
+                                    <input type="text" placeholder="Category" required onChange={e => setFormData({ ...formData, category: e.target.value })} />
+                                    <input type="text" placeholder="Image URL" required onChange={e => setFormData({ ...formData, image: e.target.value })} />
+                                    <textarea placeholder="Description" onChange={e => setFormData({ ...formData, description: e.target.value })} className="md:col-span-2" />
+                                </>
+                            )}
+                            <div className="md:col-span-2 flex justify-end gap-4">
+                                <button type="button" onClick={() => setShowForm(false)} className="btn-outline py-2">Cancel</button>
+                                <button type="submit" className="btn-primary py-2 px-8">Save {activeTab.slice(0, -1)}</button>
+                            </div>
+                        </form>
+                    </div>
+                )}
+
+                {/* Content Tables */}
+                <div className="glass rounded-2xl overflow-hidden animate-fade-in shadow-xl border border-white/40">
                     {loading ? (
-                        <div className="p-20 text-center">
-                            <div className="spinner mx-auto mb-4"></div>
-                            <p>Loading your data...</p>
-                        </div>
-                    ) : activeTab === 'bookings' ? (
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left">
-                                <thead className="bg-primary-50">
-                                    <tr>
-                                        <th className="p-4">Customer</th>
-                                        <th className="p-4">Service</th>
-                                        <th className="p-4">Date</th>
-                                        <th className="p-4">Status</th>
-                                        <th className="p-4">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {bookings.map(item => (
-                                        <tr key={item._id} className="border-t border-gray-100 hover:bg-white/40 transition-colors">
-                                            <td className="p-4">
-                                                <p className="font-bold">{item.name}</p>
-                                                <p className="text-xs text-gray-500">{item.email}</p>
-                                                <p className="text-xs text-gray-500">{item.phone}</p>
-                                            </td>
-                                            <td className="p-4">
-                                                <span className="bg-primary-50 text-primary-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                                                    {item.service.replace('-', ' ')}
-                                                </span>
-                                            </td>
-                                            <td className="p-4 text-sm font-medium">{item.date || 'TBD'}</td>
-                                            <td className="p-4">
-                                                <span className={`px-3 py-1 rounded-full text-xs font-bold ${item.status === 'Completed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
-                                                    }`}>
-                                                    {item.status}
-                                                </span>
-                                            </td>
-                                            <td className="p-4">
-                                                <div className="flex gap-2">
-                                                    {item.status !== 'Completed' && (
-                                                        <button
-                                                            onClick={() => updateBookingStatus(item._id, 'Completed')}
-                                                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
-                                                            title="Mark Completed"
-                                                        >
-                                                            <FaCheckCircle />
-                                                        </button>
-                                                    )}
-                                                    <button
-                                                        onClick={() => deleteItem('bookings', item._id)}
-                                                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-                                                        title="Delete"
-                                                    >
-                                                        <FaTrash />
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                    {bookings.length === 0 && (
-                                        <tr><td colSpan="5" className="p-10 text-center text-gray-500">No bookings found yet.</td></tr>
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
+                        <div className="p-20 text-center"><div className="spinner mx-auto mb-4"></div><p>Loading...</p></div>
                     ) : (
                         <div className="overflow-x-auto">
-                            <table className="w-full text-left">
-                                <thead className="bg-primary-50">
-                                    <tr>
-                                        <th className="p-4">Sender</th>
-                                        <th className="p-4">Subject</th>
-                                        <th className="p-4">Message</th>
-                                        <th className="p-4">Date</th>
-                                        <th className="p-4">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {contacts.map(item => (
-                                        <tr key={item._id} className="border-t border-gray-100 hover:bg-white/40 transition-colors">
-                                            <td className="p-4">
-                                                <p className="font-bold">{item.name}</p>
-                                                <p className="text-xs text-gray-500">{item.email}</p>
-                                            </td>
-                                            <td className="p-4 font-bold text-sm">{item.subject}</td>
-                                            <td className="p-4">
-                                                <p className="text-sm text-gray-600 max-w-md line-clamp-2">{item.message}</p>
-                                            </td>
-                                            <td className="p-4 text-sm whitespace-nowrap">
-                                                {new Date(item.createdAt).toLocaleDateString()}
-                                            </td>
-                                            <td className="p-4">
-                                                <button
-                                                    onClick={() => deleteItem('contacts', item._id)}
-                                                    className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-                                                    title="Delete"
-                                                >
-                                                    <FaTrash />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                    {contacts.length === 0 && (
-                                        <tr><td colSpan="5" className="p-10 text-center text-gray-500">No inquiries found yet.</td></tr>
-                                    )}
-                                </tbody>
-                            </table>
+                            {activeTab === 'bookings' && <BookingsTable data={bookings} updateStatus={updateBookingStatus} deleteItem={deleteItem} />}
+                            {activeTab === 'contacts' && <ContactsTable data={contacts} deleteItem={deleteItem} />}
+                            {activeTab === 'products' && <ProductsTable data={products} deleteItem={deleteItem} />}
+                            {activeTab === 'gallery' && <GalleryTable data={gallery} deleteItem={deleteItem} />}
                         </div>
                     )}
                 </div>
@@ -311,5 +293,128 @@ const Admin = () => {
         </div>
     );
 };
+
+// --- Sub-Components ---
+
+const StatCard = ({ icon, label, val, color }) => (
+    <div className="glass p-6 rounded-2xl flex items-center gap-4 border-b-4 border-primary-500">
+        <div className={`bg-${color}-100 p-4 rounded-xl text-${color}-600`}>{icon}</div>
+        <div>
+            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">{label}</p>
+            <h3 className="text-2xl font-black text-gray-800">{val}</h3>
+        </div>
+    </div>
+);
+
+const BookingsTable = ({ data, updateStatus, deleteItem }) => (
+    <table className="w-full text-left">
+        <thead className="bg-primary-50 text-primary-800 uppercase text-xs font-bold">
+            <tr>
+                <th className="p-4">Customer</th>
+                <th className="p-4">Service</th>
+                <th className="p-4">Status</th>
+                <th className="p-4">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {data.map(item => (
+                <tr key={item._id} className="border-t border-gray-100/50 hover:bg-white/40 transition-colors">
+                    <td className="p-4">
+                        <p className="font-bold text-gray-800">{item.name}</p>
+                        <p className="text-xs text-gray-500">{item.email} • {item.phone}</p>
+                    </td>
+                    <td className="p-4">
+                        <span className="text-xs font-bold bg-white/50 px-2 py-1 rounded border border-gray-200">{item.service}</span>
+                    </td>
+                    <td className="p-4">
+                        <span className={`px-2 py-1 rounded text-[10px] font-black uppercase ${item.status === 'Completed' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
+                            {item.status}
+                        </span>
+                    </td>
+                    <td className="p-4">
+                        <div className="flex gap-2">
+                            {item.status !== 'Completed' && (
+                                <button onClick={() => updateStatus(item._id, 'Completed')} className="text-green-600 hover:scale-110 transition-transform"><FaCheckCircle /></button>
+                            )}
+                            <button onClick={() => deleteItem('bookings', item._id)} className="text-red-400 hover:text-red-600"><FaTrash /></button>
+                        </div>
+                    </td>
+                </tr>
+            ))}
+        </tbody>
+    </table>
+);
+
+const ContactsTable = ({ data, deleteItem }) => (
+    <table className="w-full text-left">
+        <thead className="bg-primary-50 text-primary-800 uppercase text-xs font-bold">
+            <tr>
+                <th className="p-4">From</th>
+                <th className="p-4">Subject</th>
+                <th className="p-4">Message</th>
+                <th className="p-4">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {data.map(item => (
+                <tr key={item._id} className="border-t border-gray-100/50 hover:bg-white/40">
+                    <td className="p-4"><p className="font-bold">{item.name}</p><p className="text-xs text-gray-500">{item.email}</p></td>
+                    <td className="p-4 text-xs font-bold">{item.subject}</td>
+                    <td className="p-4"><p className="text-sm line-clamp-2 max-w-xs">{item.message}</p></td>
+                    <td className="p-4"><button onClick={() => deleteItem('contacts', item._id)} className="text-red-400"><FaTrash /></button></td>
+                </tr>
+            ))}
+        </tbody>
+    </table>
+);
+
+const ProductsTable = ({ data, deleteItem }) => (
+    <table className="w-full text-left">
+        <thead className="bg-primary-50 text-primary-800 uppercase text-xs font-bold">
+            <tr>
+                <th className="p-4">Product</th>
+                <th className="p-4">Category</th>
+                <th className="p-4">Description</th>
+                <th className="p-4">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {data.map(item => (
+                <tr key={item._id} className="border-t border-gray-100/50 hover:bg-white/40">
+                    <td className="p-4 flex items-center gap-3">
+                        <img src={item.image} alt="" className="w-10 h-10 rounded object-cover border" />
+                        <span className="font-bold">{item.name}</span>
+                    </td>
+                    <td className="p-4 text-xs">{item.category}</td>
+                    <td className="p-4 text-xs text-gray-500 max-w-xs truncate">{item.description}</td>
+                    <td className="p-4"><button onClick={() => deleteItem('products', item._id)} className="text-red-400"><FaTrash /></button></td>
+                </tr>
+            ))}
+        </tbody>
+    </table>
+);
+
+const GalleryTable = ({ data, deleteItem }) => (
+    <table className="w-full text-left">
+        <thead className="bg-primary-50 text-primary-800 uppercase text-xs font-bold">
+            <tr>
+                <th className="p-4">Preview</th>
+                <th className="p-4">Title</th>
+                <th className="p-4">Category</th>
+                <th className="p-4">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {data.map(item => (
+                <tr key={item._id} className="border-t border-gray-100/50 hover:bg-white/40">
+                    <td className="p-4"><img src={item.image} alt="" className="w-12 h-8 rounded object-cover shadow-sm" /></td>
+                    <td className="p-4 font-bold">{item.title}</td>
+                    <td className="p-4 text-xs">{item.category}</td>
+                    <td className="p-4"><button onClick={() => deleteItem('gallery', item._id)} className="text-red-400"><FaTrash /></button></td>
+                </tr>
+            ))}
+        </tbody>
+    </table>
+);
 
 export default Admin;

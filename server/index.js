@@ -4,6 +4,8 @@ const nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
 const Booking = require('./models/Booking');
 const Contact = require('./models/Contact');
+const Product = require('./models/Product');
+const Gallery = require('./models/Gallery');
 require('dotenv').config();
 
 const app = express();
@@ -165,6 +167,91 @@ app.delete('/api/admin/contacts/:id', adminAuth, async (req, res) => {
     try {
         await Contact.findByIdAndDelete(req.params.id);
         res.json({ success: true, message: 'Inquiry deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// --- CMS Endpoints (Products) ---
+
+// GET all products
+app.get('/api/products', async (req, res) => {
+    try {
+        const products = await Product.find().sort({ createdAt: -1 });
+        res.json({ success: true, data: products });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// POST add product
+app.post('/api/admin/products', adminAuth, async (req, res) => {
+    try {
+        const product = new Product(req.body);
+        await product.save();
+        res.json({ success: true, data: product });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// DELETE product
+app.delete('/api/admin/products/:id', adminAuth, async (req, res) => {
+    try {
+        await Product.findByIdAndDelete(req.params.id);
+        res.json({ success: true, message: 'Product deleted' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// --- CMS Endpoints (Gallery) ---
+
+// GET all gallery images
+app.get('/api/gallery', async (req, res) => {
+    try {
+        const items = await Gallery.find().sort({ createdAt: -1 });
+        res.json({ success: true, data: items });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// POST add gallery item
+app.post('/api/admin/gallery', adminAuth, async (req, res) => {
+    try {
+        const item = new Gallery(req.body);
+        await item.save();
+        res.json({ success: true, data: item });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// DELETE gallery item
+app.delete('/api/admin/gallery/:id', adminAuth, async (req, res) => {
+    try {
+        await Gallery.findByIdAndDelete(req.params.id);
+        res.json({ success: true, message: 'Gallery item deleted' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// --- UTILITY: Seed Database ---
+// This is for the first run to migrate data from local files
+app.post('/api/admin/seed', adminAuth, async (req, res) => {
+    const { products, gallery } = req.body;
+    try {
+        if (products) {
+            await Product.deleteMany({});
+            await Product.insertMany(products);
+        }
+        if (gallery) {
+            await Gallery.deleteMany({});
+            await Gallery.insertMany(gallery);
+        }
+        res.json({ success: true, message: 'Database seeded successfully' });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }

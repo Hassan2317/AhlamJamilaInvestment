@@ -1,13 +1,29 @@
+import { useState, useEffect } from 'react';
 import GalleryGrid from '../components/GalleryGrid';
-import { galleryImages } from '../data/gallery';
+import { galleryImages as staticGallery } from '../data/gallery';
 
 const Gallery = () => {
+    const [images, setImages] = useState(staticGallery);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/api/gallery')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.data.length > 0) {
+                    setImages(data.data);
+                }
+            })
+            .catch(err => console.error('Error fetching gallery:', err))
+            .finally(() => setLoading(false));
+    }, []);
+
     return (
         <div className="section-padding">
             <div className="container mx-auto">
                 {/* Header */}
-                <div className="text-center mb-12 animate-fade-in">
-                    <h1 className="text-primary-800 mb-4 font-display">Project Gallery</h1>
+                <div className="text-center mb-12 animate-fade-in text-reveal">
+                    <h1 className="text-secondary-800 mb-4 font-display">Project Excellence</h1>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                         Explore our portfolio of completed projects. From beautiful landscapes to solid infrastructure,
                         see the quality and craftsmanship that defines our work.
@@ -15,7 +31,11 @@ const Gallery = () => {
                 </div>
 
                 {/* Gallery Grid */}
-                <GalleryGrid images={galleryImages} />
+                {loading ? (
+                    <div className="flex justify-center p-20"><div className="spinner"></div></div>
+                ) : (
+                    <GalleryGrid images={images} />
+                )}
 
                 {/* CTA Section */}
                 <div className="glass rounded-2xl p-8 md:p-12 mt-12 text-center">

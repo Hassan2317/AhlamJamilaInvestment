@@ -19,8 +19,8 @@ const GalleryGrid = ({ images }) => {
                         key={category}
                         onClick={() => setFilter(category)}
                         className={`px-6 py-2 rounded-lg font-semibold transition-all duration-300 ${filter === category
-                                ? 'bg-primary-700 text-white shadow-lg'
-                                : 'glass text-gray-700 hover:bg-primary-100'
+                            ? 'bg-primary-700 text-white shadow-lg'
+                            : 'glass text-gray-700 hover:bg-primary-100'
                             }`}
                     >
                         {category}
@@ -32,7 +32,7 @@ const GalleryGrid = ({ images }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredImages.map((image) => (
                     <div
-                        key={image.id}
+                        key={image._id || image.id}
                         onClick={() => setSelectedImage(image)}
                         className="glass rounded-xl overflow-hidden cursor-pointer card-hover group"
                     >

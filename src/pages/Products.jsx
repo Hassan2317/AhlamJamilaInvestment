@@ -1,13 +1,29 @@
+import { useState, useEffect } from 'react';
 import ProductCard from '../components/ProductCard';
-import { products } from '../data/products';
+import { products as staticProducts } from '../data/products';
 
 const Products = () => {
+    const [products, setProducts] = useState(staticProducts);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/api/products')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.data.length > 0) {
+                    setProducts(data.data);
+                }
+            })
+            .catch(err => console.error('Error fetching products:', err))
+            .finally(() => setLoading(false));
+    }, []);
+
     return (
         <div className="section-padding">
             <div className="container mx-auto">
                 {/* Header */}
-                <div className="text-center mb-12 animate-fade-in">
-                    <h1 className="text-primary-800 mb-4 font-display">Our Products</h1>
+                <div className="text-center mb-12 animate-fade-in text-reveal">
+                    <h1 className="text-secondary-800 mb-4 font-display">Our Premium Products</h1>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                         Quality materials for every project. From beautiful trees to durable construction materials,
                         we provide everything you need to bring your vision to life.
@@ -15,11 +31,15 @@ const Products = () => {
                 </div>
 
                 {/* Products Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {products.map((product) => (
-                        <ProductCard key={product.id} product={product} />
-                    ))}
-                </div>
+                {loading ? (
+                    <div className="flex justify-center p-20"><div className="spinner"></div></div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {products.map((product) => (
+                            <ProductCard key={product._id || product.id} product={product} />
+                        ))}
+                    </div>
+                )}
 
                 {/* CTA Section */}
                 <div className="glass rounded-2xl p-8 md:p-12 mt-12 text-center">
