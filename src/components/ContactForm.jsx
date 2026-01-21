@@ -11,6 +11,7 @@ const ContactForm = () => {
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [toastType, setToastType] = useState('success');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e) => {
         setFormData({
@@ -19,7 +20,7 @@ const ContactForm = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         // Basic validation
@@ -31,20 +32,46 @@ const ContactForm = () => {
             return;
         }
 
-        // Simulate form submission
-        console.log('Contact form submitted:', formData);
-        setToastMessage('Message sent successfully! We will get back to you soon.');
-        setToastType('success');
-        setShowToast(true);
+        setIsLoading(true);
 
-        // Reset form
-        setFormData({
-            name: '',
-            email: '',
-            message: ''
-        });
+        try {
+            const response = await fetch('http://localhost:5000/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    subject: 'General Inquiry', // Default subject for contact form
+                    message: formData.message
+                }),
+            });
 
-        setTimeout(() => setShowToast(false), 5000);
+            const data = await response.json();
+
+            if (data.success) {
+                setToastMessage(data.message);
+                setToastType('success');
+                // Reset form
+                setFormData({
+                    name: '',
+                    email: '',
+                    message: ''
+                });
+            } else {
+                setToastMessage(data.message || 'Failed to send message.');
+                setToastType('error');
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            setToastMessage('Something went wrong. Please try again later.');
+            setToastType('error');
+        } finally {
+            setIsLoading(false);
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 5000);
+        }
     };
 
     return (
@@ -102,9 +129,19 @@ const ContactForm = () => {
                 </div>
 
                 {/* Submit Button */}
-                <button type="submit" className="btn-primary w-full text-lg flex items-center justify-center space-x-2">
-                    <FaPaperPlane />
-                    <span>Send Message</span>
+                <button
+                    type="submit"
+                    className="btn-primary w-full text-lg flex items-center justify-center space-x-2 disabled:opacity-50"
+                    disabled={isLoading}
+                >
+                    {isLoading ? (
+                        <div className="spinner-small"></div>
+                    ) : (
+                        <>
+                            <FaPaperPlane />
+                            <span>Send Message</span>
+                        </>
+                    )}
                 </button>
             </form>
 

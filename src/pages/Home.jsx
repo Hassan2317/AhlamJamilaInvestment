@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import HeroBanner from '../components/HeroBanner';
+import AnimatedCounter from '../components/AnimatedCounter';
 import { FaTree, FaHammer, FaSeedling, FaArrowRight, FaCheckCircle } from 'react-icons/fa';
 
 const Home = () => {
@@ -22,10 +23,10 @@ const Home = () => {
     ];
 
     const stats = [
-        { number: '500+', label: 'Projects Completed' },
-        { number: '1000+', label: 'Happy Clients' },
-        { number: '15+', label: 'Years Experience' },
-        { number: '50+', label: 'Expert Team' }
+        { number: 500, label: 'Projects Completed', suffix: '+' },
+        { number: 1000, label: 'Happy Clients', suffix: '+' },
+        { number: 15, label: 'Years Experience', suffix: '+' },
+        { number: 50, label: 'Expert Team', suffix: '+' }
     ];
 
     return (
@@ -34,7 +35,7 @@ const Home = () => {
             <HeroBanner />
 
             {/* Quick Links Section */}
-            <section className="section-padding">
+            <section className="section-padding reveal">
                 <div className="container mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <Link to="/products" className="glass rounded-xl p-8 card-hover group text-center">
@@ -77,7 +78,7 @@ const Home = () => {
             </section>
 
             {/* About Section */}
-            <section className="section-padding bg-white/30">
+            <section className="section-padding bg-white/30 reveal">
                 <div className="container mx-auto">
                     <div className="max-w-4xl mx-auto text-center mb-12">
                         <h2 className="text-primary-800 mb-4 font-display">About Ahlam Jamila Investment</h2>
@@ -102,14 +103,14 @@ const Home = () => {
             </section>
 
             {/* Stats Section */}
-            <section className="section-padding">
+            <section className="section-padding reveal">
                 <div className="container mx-auto">
                     <div className="glass-dark rounded-2xl p-12">
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                             {stats.map((stat, index) => (
                                 <div key={index} className="animate-scale-in">
                                     <div className="text-4xl md:text-5xl font-bold text-accent-400 mb-2 font-display">
-                                        {stat.number}
+                                        <AnimatedCounter end={stat.number} suffix={stat.suffix} />
                                     </div>
                                     <div className="text-white text-sm md:text-base">{stat.label}</div>
                                 </div>

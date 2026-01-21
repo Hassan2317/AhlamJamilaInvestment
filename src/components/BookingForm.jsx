@@ -14,6 +14,7 @@ const BookingForm = () => {
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [toastType, setToastType] = useState('success');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e) => {
         setFormData({
@@ -22,7 +23,7 @@ const BookingForm = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         // Basic validation
@@ -34,23 +35,51 @@ const BookingForm = () => {
             return;
         }
 
-        // Simulate form submission
-        console.log('Booking submitted:', formData);
-        setToastMessage('Booking request submitted successfully! We will contact you soon.');
-        setToastType('success');
-        setShowToast(true);
+        setIsLoading(true);
 
-        // Reset form
-        setFormData({
-            fullName: '',
-            email: '',
-            phone: '',
-            serviceType: '',
-            preferredDate: '',
-            description: ''
-        });
+        try {
+            const response = await fetch('http://localhost:5000/api/booking', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: formData.fullName,
+                    email: formData.email,
+                    phone: formData.phone,
+                    service: formData.serviceType,
+                    date: formData.preferredDate,
+                    details: formData.description
+                }),
+            });
 
-        setTimeout(() => setShowToast(false), 5000);
+            const data = await response.json();
+
+            if (data.success) {
+                setToastMessage(data.message);
+                setToastType('success');
+                // Reset form
+                setFormData({
+                    fullName: '',
+                    email: '',
+                    phone: '',
+                    serviceType: '',
+                    preferredDate: '',
+                    description: ''
+                });
+            } else {
+                setToastMessage(data.message || 'Failed to submit booking request.');
+                setToastType('error');
+            }
+        } catch (error) {
+            console.error('Error submitting booking:', error);
+            setToastMessage('Something went wrong. Please try again later.');
+            setToastType('error');
+        } finally {
+            setIsLoading(false);
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 5000);
+        }
     };
 
     return (
@@ -160,8 +189,16 @@ const BookingForm = () => {
                 </div>
 
                 {/* Submit Button */}
-                <button type="submit" className="btn-primary w-full text-lg">
-                    Submit Booking Request
+                <button
+                    type="submit"
+                    className="btn-primary w-full text-lg disabled:opacity-50 flex items-center justify-center space-x-2"
+                    disabled={isLoading}
+                >
+                    {isLoading ? (
+                        <div className="spinner-small"></div>
+                    ) : (
+                        'Submit Booking Request'
+                    )}
                 </button>
             </form>
 
