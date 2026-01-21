@@ -34,7 +34,7 @@ const Contact = () => {
                                     </div>
                                     <div>
                                         <h4 className="font-semibold text-gray-800 mb-1">Address</h4>
-                                        <p className="text-gray-600">123 Business Street, City, Country</p>
+                                        <p className="text-gray-600">Zomba Area, Malawi</p>
                                     </div>
                                 </div>
 
@@ -77,7 +77,7 @@ const Contact = () => {
                         {/* Map */}
                         <div className="glass rounded-xl overflow-hidden h-64">
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.1841!2d-73.9875!3d40.7484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDQ0JzU0LjIiTiA3M8KwNTknMTUuMCJX!5e0!3m2!1sen!2s!4v1234567890"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d123094.4126164529!2d35.26119395931278!3d-15.392703970672146!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x18d904a4e69c5955%3A0x3f17a7caed60f7de!2sZomba!5e0!3m2!1sen!2smw!4v1768990086621!5m2!1sen!2smw"
                                 width="100%"
                                 height="100%"
                                 style={{ border: 0 }}

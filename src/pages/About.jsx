@@ -1,4 +1,4 @@
-import { FaLeaf, FaHammer, FaUsers, FaAward } from 'react-icons/fa';
+import { FaLeaf, FaHammer, FaUsers, FaAward, FaBullseye, FaLightbulb, FaBookOpen } from 'react-icons/fa';
 
 const About = () => {
     const values = [
@@ -37,7 +37,12 @@ const About = () => {
 
                 {/* Company Story */}
                 <div className="glass rounded-2xl p-8 md:p-12 mb-12 animate-slide-up">
-                    <h2 className="text-3xl font-bold text-primary-800 mb-6 font-display">Our Story</h2>
+                    <div className="flex flex-col items-center text-center mb-8">
+                        <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mb-6">
+                            <FaBookOpen className="text-3xl text-primary-600" />
+                        </div>
+                        <h2 className="text-3xl font-bold text-primary-800 font-display">Our Story</h2>
+                    </div>
                     <div className="space-y-4 text-gray-700 leading-relaxed">
                         <p>
                             Ahlam Jamila Investment was founded with a vision to provide high-quality agricultural and construction
@@ -58,24 +63,26 @@ const About = () => {
                 </div>
 
                 {/* Mission & Vision */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-                    <div className="glass rounded-xl p-8 animate-slide-up">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                    <div className="glass rounded-2xl p-8 animate-slide-up flex flex-col items-center text-center">
+                        <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mb-6">
+                            <FaBullseye className="text-3xl text-primary-600" />
+                        </div>
                         <h3 className="text-2xl font-bold text-primary-800 mb-4 font-display">Our Mission</h3>
-                        <p className="text-gray-700 leading-relaxed">
-                            To provide exceptional agricultural and construction products and services that enhance the quality
-                            of life for our customers. We strive to deliver sustainable solutions that combine traditional
-                            craftsmanship with modern innovation, while maintaining the highest standards of quality and
-                            environmental responsibility.
+                        <p className="text-gray-700 leading-relaxed max-w-md">
+                            To deliver premium agricultural and construction solutions through craftsmanship,
+                            innovation, and sustainable practices that exceed client expectations.
                         </p>
                     </div>
 
-                    <div className="glass rounded-xl p-8 animate-slide-up">
+                    <div className="glass rounded-2xl p-8 animate-slide-up flex flex-col items-center text-center">
+                        <div className="w-16 h-16 bg-secondary-100 rounded-full flex items-center justify-center mb-6">
+                            <FaLightbulb className="text-3xl text-secondary-600" />
+                        </div>
                         <h3 className="text-2xl font-bold text-primary-800 mb-4 font-display">Our Vision</h3>
-                        <p className="text-gray-700 leading-relaxed">
-                            To be the leading provider of agricultural and construction solutions in our region, recognized
-                            for our unwavering commitment to quality, innovation, and customer satisfaction. We envision a
-                            future where every project we undertake contributes to building stronger communities and a
-                            greener environment.
+                        <p className="text-gray-700 leading-relaxed max-w-md">
+                            To be the regional leader in sustainable infrastructure and agriculture,
+                            recognized for quality and building stronger, greener communities.
                         </p>
                     </div>
                 </div>
