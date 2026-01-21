@@ -1,9 +1,23 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import HeroBanner from '../components/HeroBanner';
 import AnimatedCounter from '../components/AnimatedCounter';
-import { FaTree, FaHammer, FaSeedling, FaArrowRight, FaCheckCircle } from 'react-icons/fa';
+import { FaTree, FaHammer, FaSeedling, FaArrowRight, FaCheckCircle, FaImages } from 'react-icons/fa';
 
 const Home = () => {
+    const [recentProjects, setRecentProjects] = useState([]);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/api/gallery')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    setRecentProjects(data.data.slice(0, 3));
+                }
+            })
+            .catch(err => console.error('Error fetching recent projects:', err));
+    }, []);
+
     const features = [
         {
             icon: <FaTree className="text-4xl text-primary-600" />,
@@ -119,6 +133,42 @@ const Home = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Recent Projects (Dynamic CMS) */}
+            {recentProjects.length > 0 && (
+                <section className="section-padding bg-primary-900 text-white reveal">
+                    <div className="container mx-auto">
+                        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+                            <div>
+                                <h2 className="text-accent-400 mb-2 font-display">Recent Success Stories</h2>
+                                <p className="text-gray-300 max-w-2xl text-lg">
+                                    Flash updates from our latest construction and agricultural sites across Malawi.
+                                </p>
+                            </div>
+                            <Link to="/gallery" className="btn-outline border-white text-white hover:bg-white hover:text-primary-900 transition-all flex items-center gap-2">
+                                <FaImages /> View Full Portfolio
+                            </Link>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {recentProjects.map((project, index) => (
+                                <div key={project._id || index} className="group relative overflow-hidden rounded-2xl aspect-video shadow-2xl animate-fade-in">
+                                    <img
+                                        src={project.image}
+                                        alt={project.title}
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-6">
+                                        <span className="text-accent-400 text-xs font-bold uppercase tracking-widest mb-2">{project.category}</span>
+                                        <h3 className="text-xl font-bold mb-1">{project.title}</h3>
+                                        <p className="text-gray-300 text-sm line-clamp-2">{project.description}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
 
             {/* CTA Section */}
             <section className="section-padding">

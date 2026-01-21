@@ -24,28 +24,28 @@ const Footer = () => {
                     {/* Company Info */}
                     <div className="space-y-4">
                         <div className="flex items-center space-x-2">
-                            <div className="bg-primary-600 p-2 rounded-lg">
+                            <div className="bg-primary-600 p-2 rounded-lg shadow-lg">
                                 <FaLeaf className="text-white text-xl" />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold font-display">Ahlam Jamila</h3>
-                                <p className="text-sm text-gray-300">Investment</p>
+                                <h3 className="text-xl font-bold font-display tracking-tight">Ahlam Jamila</h3>
+                                <p className="text-xs text-accent-400 font-bold uppercase tracking-widest">Investment</p>
                             </div>
                         </div>
                         <p className="text-gray-300 text-sm leading-relaxed">
-                            Building dreams and growing futures with quality agricultural and construction products and services.
+                            Building dreams and growing futures with quality agricultural and construction products and services across Malawi.
                         </p>
                         <div className="flex space-x-3">
-                            <a href="#" className="bg-primary-600 hover:bg-primary-700 p-2 rounded-lg transition-colors duration-300">
+                            <a href="#" className="bg-primary-600 hover:bg-primary-700 p-2 rounded-lg transition-all duration-300 hover:-translate-y-1">
                                 <FaFacebook className="text-white" />
                             </a>
-                            <a href="#" className="bg-primary-600 hover:bg-primary-700 p-2 rounded-lg transition-colors duration-300">
+                            <a href="#" className="bg-primary-600 hover:bg-primary-700 p-2 rounded-lg transition-all duration-300 hover:-translate-y-1">
                                 <FaTwitter className="text-white" />
                             </a>
-                            <a href="#" className="bg-primary-600 hover:bg-primary-700 p-2 rounded-lg transition-colors duration-300">
+                            <a href="#" className="bg-primary-600 hover:bg-primary-700 p-2 rounded-lg transition-all duration-300 hover:-translate-y-1">
                                 <FaInstagram className="text-white" />
                             </a>
-                            <a href="#" className="bg-primary-600 hover:bg-primary-700 p-2 rounded-lg transition-colors duration-300">
+                            <a href="#" className="bg-primary-600 hover:bg-primary-700 p-2 rounded-lg transition-all duration-300 hover:-translate-y-1">
                                 <FaLinkedin className="text-white" />
                             </a>
                         </div>
@@ -53,15 +53,15 @@ const Footer = () => {
 
                     {/* Quick Links */}
                     <div>
-                        <h4 className="text-lg font-semibold mb-4 font-display">Quick Links</h4>
-                        <ul className="space-y-2">
+                        <h4 className="text-lg font-semibold mb-6 font-display border-b border-primary-500/30 pb-2 inline-block">Quick Links</h4>
+                        <ul className="space-y-3">
                             {quickLinks.map((link) => (
                                 <li key={link.path}>
                                     <Link
                                         to={link.path}
-                                        className="text-gray-300 hover:text-accent-400 transition-colors duration-300 flex items-center space-x-2"
+                                        className="text-gray-400 hover:text-accent-400 transition-colors duration-300 flex items-center space-x-2 group"
                                     >
-                                        <span className="text-accent-500">›</span>
+                                        <span className="text-primary-500 group-hover:translate-x-1 transition-transform">›</span>
                                         <span>{link.label}</span>
                                     </Link>
                                 </li>
@@ -71,15 +71,15 @@ const Footer = () => {
 
                     {/* Services */}
                     <div>
-                        <h4 className="text-lg font-semibold mb-4 font-display">Our Services</h4>
-                        <ul className="space-y-2">
+                        <h4 className="text-lg font-semibold mb-6 font-display border-b border-primary-500/30 pb-2 inline-block">Our Services</h4>
+                        <ul className="space-y-3">
                             {serviceLinks.map((link) => (
                                 <li key={link.path}>
                                     <Link
                                         to={link.path}
-                                        className="text-gray-300 hover:text-accent-400 transition-colors duration-300 flex items-center space-x-2"
+                                        className="text-gray-400 hover:text-accent-400 transition-colors duration-300 flex items-center space-x-2 group"
                                     >
-                                        <span className="text-accent-500">›</span>
+                                        <span className="text-primary-500 group-hover:translate-x-1 transition-transform">›</span>
                                         <span>{link.label}</span>
                                     </Link>
                                 </li>
@@ -89,22 +89,22 @@ const Footer = () => {
 
                     {/* Contact Info */}
                     <div>
-                        <h4 className="text-lg font-semibold mb-4 font-display">Contact Us</h4>
-                        <ul className="space-y-3">
-                            <li className="flex items-start space-x-3 text-gray-300">
+                        <h4 className="text-lg font-semibold mb-6 font-display border-b border-primary-500/30 pb-2 inline-block">Contact Us</h4>
+                        <ul className="space-y-4">
+                            <li className="flex items-start space-x-3 text-gray-400">
                                 <FaMapMarkerAlt className="text-accent-500 mt-1 flex-shrink-0" />
-                                <span className="text-sm">123 Business Street, City, Country</span>
+                                <span className="text-sm">Zomba, Malawi</span>
                             </li>
-                            <li className="flex items-center space-x-3 text-gray-300">
+                            <li className="flex items-center space-x-3 text-gray-400">
                                 <FaPhone className="text-accent-500 flex-shrink-0" />
-                                <a href="tel:+1234567890" className="text-sm hover:text-accent-400 transition-colors">
-                                    +123 456 7890
+                                <a href="tel:+265882770373" className="text-sm hover:text-accent-400 transition-colors">
+                                    +265 882 770 373
                                 </a>
                             </li>
-                            <li className="flex items-center space-x-3 text-gray-300">
+                            <li className="flex items-center space-x-3 text-gray-400">
                                 <FaEnvelope className="text-accent-500 flex-shrink-0" />
-                                <a href="mailto:info@ahlamjamila.com" className="text-sm hover:text-accent-400 transition-colors">
-                                    info@ahlamjamila.com
+                                <a href="mailto:zaminhassan2317@gmail.com" className="text-sm hover:text-accent-400 transition-colors break-all">
+                                    zaminhassan2317@gmail.com
                                 </a>
                             </li>
                         </ul>
@@ -112,12 +112,12 @@ const Footer = () => {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="border-t border-gray-700 mt-3 pt-2 text-center">
-                    <p className="text-gray-400 text-xs leading-tight">
+                <div className="border-t border-white/10 mt-12 pt-6 text-center">
+                    <p className="text-gray-500 text-xs">
                         &copy; {currentYear} Ahlam Jamila Investment. All rights reserved.
                     </p>
-                    <p className="text-gray-500 text-xs leading-tight">
-                        Designed with ❤️ for excellence
+                    <p className="text-gray-600 text-[10px] mt-1 font-bold uppercase tracking-widest">
+                        Excellence in Construction & Agriculture
                     </p>
                 </div>
             </div>

@@ -6,6 +6,7 @@ const Booking = require('./models/Booking');
 const Contact = require('./models/Contact');
 const Product = require('./models/Product');
 const Gallery = require('./models/Gallery');
+const Service = require('./models/Service');
 require('dotenv').config();
 
 const app = express();
@@ -238,10 +239,43 @@ app.delete('/api/admin/gallery/:id', adminAuth, async (req, res) => {
     }
 });
 
+// --- CMS Endpoints (Services) ---
+
+// GET all services
+app.get('/api/services', async (req, res) => {
+    try {
+        const items = await Service.find().sort({ createdAt: 1 });
+        res.json({ success: true, data: items });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// POST add service
+app.post('/api/admin/services', adminAuth, async (req, res) => {
+    try {
+        const item = new Service(req.body);
+        await item.save();
+        res.json({ success: true, data: item });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// DELETE service
+app.delete('/api/admin/services/:id', adminAuth, async (req, res) => {
+    try {
+        await Service.findByIdAndDelete(req.params.id);
+        res.json({ success: true, message: 'Service deleted' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
 // --- UTILITY: Seed Database ---
 // This is for the first run to migrate data from local files
 app.post('/api/admin/seed', adminAuth, async (req, res) => {
-    const { products, gallery } = req.body;
+    const { products, gallery, services } = req.body;
     try {
         if (products) {
             await Product.deleteMany({});
@@ -250,6 +284,10 @@ app.post('/api/admin/seed', adminAuth, async (req, res) => {
         if (gallery) {
             await Gallery.deleteMany({});
             await Gallery.insertMany(gallery);
+        }
+        if (services) {
+            await Service.deleteMany({});
+            await Service.insertMany(services);
         }
         res.json({ success: true, message: 'Database seeded successfully' });
     } catch (error) {

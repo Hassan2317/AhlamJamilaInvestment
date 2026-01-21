@@ -10,8 +10,11 @@ const Products = () => {
         fetch('http://localhost:5000/api/products')
             .then(res => res.json())
             .then(data => {
-                if (data.success && data.data.length > 0) {
-                    setProducts(data.data);
+                if (data.success) {
+                    const dbProducts = data.data;
+                    const dbNames = new Set(dbProducts.map(p => p.name));
+                    const uniqueStatic = staticProducts.filter(p => !dbNames.has(p.name));
+                    setProducts([...dbProducts, ...uniqueStatic]);
                 }
             })
             .catch(err => console.error('Error fetching products:', err))

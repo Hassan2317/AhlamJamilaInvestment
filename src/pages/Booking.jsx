@@ -1,7 +1,21 @@
+import { useState, useEffect } from 'react';
 import BookingForm from '../components/BookingForm';
-import { FaCheckCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaPhone, FaEnvelope, FaClock } from 'react-icons/fa';
 
 const Booking = () => {
+    const [dbServices, setDbServices] = useState([]);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/api/services')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.data.length > 0) {
+                    setDbServices(data.data.map(s => s.title));
+                }
+            })
+            .catch(err => console.error('Error fetching services for booking page:', err));
+    }, []);
+
     const benefits = [
         'Free initial consultation',
         'Detailed project quotation',
@@ -12,7 +26,7 @@ const Booking = () => {
     ];
 
     return (
-        <div className="section-padding">
+        <div className="section-padding text-reveal">
             <div className="container mx-auto">
                 {/* Header */}
                 <div className="text-center mb-12 animate-fade-in">
@@ -47,29 +61,43 @@ const Booking = () => {
                         </div>
 
                         {/* Contact Info */}
-                        <div className="glass-dark rounded-xl p-6 text-white">
+                        <div className="glass-dark rounded-xl p-6 text-white border-l-4 border-accent-400">
                             <h3 className="text-xl font-bold mb-4 font-display">Need Help?</h3>
-                            <p className="text-gray-200 mb-4">
+                            <p className="text-gray-200 mb-6 text-sm">
                                 Have questions about our services? Our team is here to help!
                             </p>
-                            <div className="space-y-2 text-sm">
-                                <p>📞 +123 456 7890</p>
-                                <p>✉️ info@ahlamjamila.com</p>
-                                <p>⏰ Mon-Sat: 8AM - 6PM</p>
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-3">
+                                    <FaPhone className="text-accent-400" />
+                                    <a href="tel:+265882770373" className="hover:text-accent-400 transition-colors">+265 882 770 373</a>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <FaEnvelope className="text-accent-400" />
+                                    <a href="mailto:zaminhassan2317@gmail.com" className="hover:text-accent-400 transition-colors break-all text-xs">zaminhassan2317@gmail.com</a>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <FaClock className="text-accent-400" />
+                                    <span>Mon-Sat: 8AM - 6PM</span>
+                                </div>
                             </div>
                         </div>
 
-                        {/* Services */}
+                        {/* Dynamic Services List */}
                         <div className="glass rounded-xl p-6">
                             <h3 className="text-xl font-bold text-primary-800 mb-4 font-display">
-                                Our Services
+                                Available Services
                             </h3>
                             <ul className="space-y-2 text-sm text-gray-700">
-                                <li>• Bridge Construction</li>
-                                <li>• House Construction</li>
-                                <li>• Culvert Systems</li>
-                                <li>• Landscaping Design</li>
-                                <li>• Garden Maintenance</li>
+                                {dbServices.length > 0 ? (
+                                    dbServices.map((s, idx) => <li key={idx} className="font-bold">• {s}</li>)
+                                ) : (
+                                    <>
+                                        <li>• Bridge Construction</li>
+                                        <li>• House Construction</li>
+                                        <li>• Culvert Systems</li>
+                                        <li>• Landscaping Design</li>
+                                    </>
+                                )}
                                 <li>• Custom Projects</li>
                             </ul>
                         </div>

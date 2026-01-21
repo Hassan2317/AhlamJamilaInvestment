@@ -15,6 +15,18 @@ const BookingForm = () => {
     const [toastMessage, setToastMessage] = useState('');
     const [toastType, setToastType] = useState('success');
     const [isLoading, setIsLoading] = useState(false);
+    const [services, setServices] = useState([]);
+
+    useState(() => {
+        fetch('http://localhost:5000/api/services')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.data.length > 0) {
+                    setServices(data.data.map(s => s.title));
+                }
+            })
+            .catch(err => console.error('Error fetching services for booking:', err));
+    }, []);
 
     const handleChange = (e) => {
         setFormData({
@@ -150,9 +162,17 @@ const BookingForm = () => {
                         required
                     >
                         <option value="">Select a service</option>
-                        <option value="bridge-construction">Bridge Construction</option>
-                        <option value="house-construction">Culvert & House Construction</option>
-                        <option value="landscaping">Landscaping & Garden Design</option>
+                        {services.length > 0 ? (
+                            services.map((s, idx) => (
+                                <option key={idx} value={s.toLowerCase().replace(/\s+/g, '-')}>{s}</option>
+                            ))
+                        ) : (
+                            <>
+                                <option value="bridge-construction">Bridge Construction</option>
+                                <option value="house-construction">Culvert & House Construction</option>
+                                <option value="landscaping">Landscaping & Garden Design</option>
+                            </>
+                        )}
                         <option value="other">Other</option>
                     </select>
                 </div>

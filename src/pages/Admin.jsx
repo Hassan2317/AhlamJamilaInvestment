@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { FaCalendarAlt, FaEnvelope, FaTrash, FaCheckCircle, FaChartLine, FaLock, FaSignOutAlt, FaPlus, FaBox, FaImages, FaSeedling } from 'react-icons/fa';
+import { FaCalendarAlt, FaEnvelope, FaTrash, FaCheckCircle, FaChartLine, FaLock, FaSignOutAlt, FaPlus, FaBox, FaImages, FaSeedling, FaHammer } from 'react-icons/fa';
 import { products as staticProducts } from '../data/products';
 import { galleryImages as staticGallery } from '../data/gallery';
+import { services as staticServices } from '../data/services';
 
 const Admin = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -10,6 +11,7 @@ const Admin = () => {
     const [contacts, setContacts] = useState([]);
     const [products, setProducts] = useState([]);
     const [gallery, setGallery] = useState([]);
+    const [services, setServices] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('bookings');
     const [error, setError] = useState('');
@@ -23,7 +25,7 @@ const Admin = () => {
 
     const handleLogin = (e) => {
         e.preventDefault();
-        if (password === 'admin123') {
+        if (password === 'Yatim2317') {
             setIsAuthenticated(true);
             setError('');
             sessionStorage.setItem('adminKey', password);
@@ -40,7 +42,7 @@ const Admin = () => {
 
     useEffect(() => {
         const savedKey = sessionStorage.getItem('adminKey');
-        if (savedKey === 'admin123') {
+        if (savedKey === 'Yatim2317') {
             setIsAuthenticated(true);
         }
     }, []);
@@ -55,22 +57,25 @@ const Admin = () => {
         setLoading(true);
         try {
             const adminKey = sessionStorage.getItem('adminKey');
-            const [bookingsRes, contactsRes, productsRes, galleryRes] = await Promise.all([
+            const [bookingsRes, contactsRes, productsRes, galleryRes, servicesRes] = await Promise.all([
                 fetch(`${ADMIN_API}/bookings`, { headers: { 'password': adminKey } }),
                 fetch(`${ADMIN_API}/contacts`, { headers: { 'password': adminKey } }),
                 fetch(`${API_BASE}/products`),
-                fetch(`${API_BASE}/gallery`)
+                fetch(`${API_BASE}/gallery`),
+                fetch(`${API_BASE}/services`)
             ]);
 
             const bJson = await bookingsRes.json();
             const cJson = await contactsRes.json();
             const pJson = await productsRes.json();
             const gJson = await galleryRes.json();
+            const sJson = await servicesRes.json();
 
             if (bJson.success) setBookings(bJson.data);
             if (cJson.success) setContacts(cJson.data);
             if (pJson.success) setProducts(pJson.data);
             if (gJson.success) setGallery(gJson.data);
+            if (sJson.success) setServices(sJson.data);
         } catch (err) {
             console.error('Fetch error:', err);
         } finally {
@@ -79,7 +84,7 @@ const Admin = () => {
     };
 
     const handleSeed = async () => {
-        if (!window.confirm('This will replace current database products/gallery with static data. Proceed?')) return;
+        if (!window.confirm('This will replace current database content with static data. Proceed?')) return;
         try {
             const adminKey = sessionStorage.getItem('adminKey');
             const res = await fetch(`${ADMIN_API}/seed`, {
@@ -90,7 +95,8 @@ const Admin = () => {
                 },
                 body: JSON.stringify({
                     products: staticProducts.map(({ id, ...rest }) => rest),
-                    gallery: staticGallery.map(({ id, ...rest }) => rest)
+                    gallery: staticGallery.map(({ id, ...rest }) => rest),
+                    services: staticServices.map(({ id, name, ...rest }) => ({ title: name, ...rest }))
                 })
             });
             const data = await res.json();
@@ -106,7 +112,7 @@ const Admin = () => {
     const handleSubmitCMS = async (e) => {
         e.preventDefault();
         const adminKey = sessionStorage.getItem('adminKey');
-        const endpoint = activeTab === 'products' ? 'products' : 'gallery';
+        const endpoint = activeTab;
 
         try {
             const res = await fetch(`${ADMIN_API}/${endpoint}`, {
@@ -120,7 +126,8 @@ const Admin = () => {
             const data = await res.json();
             if (data.success) {
                 if (activeTab === 'products') setProducts([data.data, ...products]);
-                else setGallery([data.data, ...gallery]);
+                else if (activeTab === 'gallery') setGallery([data.data, ...gallery]);
+                else if (activeTab === 'services') setServices([data.data, ...services]);
                 setShowForm(false);
                 setFormData({});
             }
@@ -143,6 +150,7 @@ const Admin = () => {
                 else if (type === 'contacts') setContacts(contacts.filter(c => c._id !== id));
                 else if (type === 'products') setProducts(products.filter(p => p._id !== id));
                 else if (type === 'gallery') setGallery(gallery.filter(g => g._id !== id));
+                else if (type === 'services') setServices(services.filter(s => s._id !== id));
             }
         } catch (err) {
             console.error('Delete error:', err);
@@ -207,7 +215,7 @@ const Admin = () => {
                     <h1 className="text-4xl font-bold text-primary-800 font-display">Admin CMS</h1>
                     <div className="flex gap-4">
                         <button onClick={handleSeed} className="btn-outline flex items-center gap-2 text-xs py-2">
-                            <FaSeedling /> Initial Migration
+                            <FaSeedling /> Force Master Sync
                         </button>
                         <button onClick={handleLogout} className="btn-outline flex items-center gap-2 text-xs py-2 border-red-200 text-red-600 hover:bg-red-50">
                             <FaSignOutAlt /> Logout
@@ -215,17 +223,18 @@ const Admin = () => {
                     </div>
                 </div>
 
-                {/* Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+                {/* Updated Stats Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-10">
                     <StatCard icon={<FaCalendarAlt />} label="Bookings" val={bookings.length} color="blue" />
                     <StatCard icon={<FaEnvelope />} label="Inquiries" val={contacts.length} color="green" />
                     <StatCard icon={<FaBox />} label="Products" val={products.length} color="orange" />
                     <StatCard icon={<FaImages />} label="Gallery" val={gallery.length} color="purple" />
+                    <StatCard icon={<FaHammer />} label="Services" val={services.length} color="pink" />
                 </div>
 
                 {/* Tabs */}
                 <div className="flex flex-wrap gap-2 mb-8 bg-white/20 p-2 rounded-2xl backdrop-blur-sm">
-                    {['bookings', 'contacts', 'products', 'gallery'].map(t => (
+                    {['bookings', 'contacts', 'products', 'gallery', 'services'].map(t => (
                         <button
                             key={t}
                             onClick={() => { setActiveTab(t); setShowForm(false); }}
@@ -239,12 +248,12 @@ const Admin = () => {
                 {/* Content Header */}
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-bold text-primary-800 capitalize">{activeTab} List</h2>
-                    {(activeTab === 'products' || activeTab === 'gallery') && (
+                    {(activeTab !== 'bookings' && activeTab !== 'contacts') && (
                         <button
                             onClick={() => setShowForm(!showForm)}
                             className="btn-primary flex items-center gap-2 py-2 px-4 text-sm"
                         >
-                            <FaPlus /> Add New {activeTab === 'products' ? 'Product' : 'Image'}
+                            <FaPlus /> Add New {activeTab.slice(0, -1)}
                         </button>
                     )}
                 </div>
@@ -260,12 +269,18 @@ const Admin = () => {
                                     <input type="text" placeholder="Image URL" required onChange={e => setFormData({ ...formData, image: e.target.value })} />
                                     <textarea placeholder="Description" onChange={e => setFormData({ ...formData, description: e.target.value })} className="md:col-span-2" />
                                 </>
-                            ) : (
+                            ) : activeTab === 'gallery' ? (
                                 <>
                                     <input type="text" placeholder="Title" required onChange={e => setFormData({ ...formData, title: e.target.value })} />
                                     <input type="text" placeholder="Category" required onChange={e => setFormData({ ...formData, category: e.target.value })} />
                                     <input type="text" placeholder="Image URL" required onChange={e => setFormData({ ...formData, image: e.target.value })} />
                                     <textarea placeholder="Description" onChange={e => setFormData({ ...formData, description: e.target.value })} className="md:col-span-2" />
+                                </>
+                            ) : (
+                                <>
+                                    <input type="text" placeholder="Service Title" required onChange={e => setFormData({ ...formData, title: e.target.value })} />
+                                    <input type="text" placeholder="Icon Emoji (e.g. 🏗️)" required onChange={e => setFormData({ ...formData, icon: e.target.value })} />
+                                    <textarea placeholder="Description" required onChange={e => setFormData({ ...formData, description: e.target.value })} className="md:col-span-2" />
                                 </>
                             )}
                             <div className="md:col-span-2 flex justify-end gap-4">
@@ -286,6 +301,7 @@ const Admin = () => {
                             {activeTab === 'contacts' && <ContactsTable data={contacts} deleteItem={deleteItem} />}
                             {activeTab === 'products' && <ProductsTable data={products} deleteItem={deleteItem} />}
                             {activeTab === 'gallery' && <GalleryTable data={gallery} deleteItem={deleteItem} />}
+                            {activeTab === 'services' && <ServicesTable data={services} deleteItem={deleteItem} />}
                         </div>
                     )}
                 </div>
@@ -300,8 +316,8 @@ const StatCard = ({ icon, label, val, color }) => (
     <div className="glass p-6 rounded-2xl flex items-center gap-4 border-b-4 border-primary-500">
         <div className={`bg-${color}-100 p-4 rounded-xl text-${color}-600`}>{icon}</div>
         <div>
-            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">{label}</p>
-            <h3 className="text-2xl font-black text-gray-800">{val}</h3>
+            <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider">{label}</p>
+            <h3 className="text-xl font-black text-gray-800">{val}</h3>
         </div>
     </div>
 );
@@ -411,6 +427,32 @@ const GalleryTable = ({ data, deleteItem }) => (
                     <td className="p-4 font-bold">{item.title}</td>
                     <td className="p-4 text-xs">{item.category}</td>
                     <td className="p-4"><button onClick={() => deleteItem('gallery', item._id)} className="text-red-400"><FaTrash /></button></td>
+                </tr>
+            ))}
+        </tbody>
+    </table>
+);
+
+const ServicesTable = ({ data, deleteItem }) => (
+    <table className="w-full text-left">
+        <thead className="bg-primary-50 text-primary-800 uppercase text-xs font-bold">
+            <tr>
+                <th className="p-4">Service</th>
+                <th className="p-4">Description</th>
+                <th className="p-4">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {data.map(item => (
+                <tr key={item._id} className="border-t border-gray-100/50 hover:bg-white/40">
+                    <td className="p-4">
+                        <div className="flex items-center gap-3">
+                            <span className="text-2xl">{item.icon}</span>
+                            <span className="font-bold">{item.title}</span>
+                        </div>
+                    </td>
+                    <td className="p-4 text-xs text-gray-500">{item.description}</td>
+                    <td className="p-4"><button onClick={() => deleteItem('services', item._id)} className="text-red-400"><FaTrash /></button></td>
                 </tr>
             ))}
         </tbody>

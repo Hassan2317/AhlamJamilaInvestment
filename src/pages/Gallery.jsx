@@ -10,8 +10,11 @@ const Gallery = () => {
         fetch('http://localhost:5000/api/gallery')
             .then(res => res.json())
             .then(data => {
-                if (data.success && data.data.length > 0) {
-                    setImages(data.data);
+                if (data.success) {
+                    const dbImages = data.data;
+                    const dbTitles = new Set(dbImages.map(img => img.title));
+                    const uniqueStatic = staticGallery.filter(img => !dbTitles.has(img.title));
+                    setImages([...dbImages, ...uniqueStatic]);
                 }
             })
             .catch(err => console.error('Error fetching gallery:', err))

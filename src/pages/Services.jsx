@@ -1,14 +1,33 @@
+import { useState, useEffect } from 'react';
 import ServiceCard from '../components/ServiceCard';
-import { services } from '../data/services';
+import { services as staticServices } from '../data/services';
 import { Link } from 'react-router-dom';
 
 const Services = () => {
+    const [services, setServices] = useState(staticServices);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/api/services')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const dbServices = data.data;
+                    const dbTitles = new Set(dbServices.map(s => s.title));
+                    const uniqueStatic = staticServices.filter(s => !dbTitles.has(s.name));
+                    setServices([...dbServices.map(s => ({ ...s, name: s.title })), ...uniqueStatic]);
+                }
+            })
+            .catch(err => console.error('Error fetching services:', err))
+            .finally(() => setLoading(false));
+    }, []);
+
     return (
         <div className="section-padding">
             <div className="container mx-auto">
                 {/* Header */}
-                <div className="text-center mb-12 animate-fade-in">
-                    <h1 className="text-primary-800 mb-4 font-display">Our Services</h1>
+                <div className="text-center mb-12 animate-fade-in text-reveal">
+                    <h1 className="text-secondary-800 mb-4 font-display">Our Professional Services</h1>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                         Professional construction and landscaping services delivered by experienced experts.
                         We turn your vision into reality with quality workmanship and attention to detail.
@@ -16,11 +35,15 @@ const Services = () => {
                 </div>
 
                 {/* Services Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
-                    {services.map((service) => (
-                        <ServiceCard key={service.id} service={service} />
-                    ))}
-                </div>
+                {loading ? (
+                    <div className="flex justify-center p-20"><div className="spinner"></div></div>
+                ) : (
+                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
+                        {services.map((service) => (
+                            <ServiceCard key={service._id || service.id} service={service} />
+                        ))}
+                    </div>
+                )}
 
                 {/* Process Section */}
                 <div className="py-16 reveal">
