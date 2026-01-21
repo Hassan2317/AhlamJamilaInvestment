@@ -37,12 +37,14 @@ const Admin = () => {
         sessionStorage.removeItem('adminKey');
     };
 
-    useEffect(() => {
-        const savedKey = sessionStorage.getItem('adminKey');
-        if (savedKey === 'Yatim2317') {
-            setIsAuthenticated(true);
-        }
-    }, []);
+    // Removed auto-login check to ensure password is required every time the page is visited
+    // useEffect(() => {
+    //     const savedKey = sessionStorage.getItem('adminKey');
+    //     if (savedKey === 'Yatim2317') {
+    //         setIsAuthenticated(true);
+    //     }
+    // }, []);
+
 
     useEffect(() => {
         if (isAuthenticated) {

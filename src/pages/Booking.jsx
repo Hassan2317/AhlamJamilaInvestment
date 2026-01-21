@@ -70,7 +70,7 @@ const Booking = () => {
                             <div className="space-y-4">
                                 <div className="flex items-center gap-3">
                                     <FaPhone className="text-accent-400" />
-                                    <a href="tel:+265882770373" className="hover:text-accent-400 transition-colors">+265 882 770 373</a>
+                                    <a href="tel:+265994454221" className="hover:text-accent-400 transition-colors">+265 994 454 221</a>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <FaEnvelope className="text-accent-400" />
