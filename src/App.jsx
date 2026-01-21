@@ -10,6 +10,7 @@ import Services from './pages/Services';
 import Booking from './pages/Booking';
 import Gallery from './pages/Gallery';
 import Contact from './pages/Contact';
+import Admin from './pages/Admin';
 
 function App() {
     useEffect(() => {
@@ -46,6 +47,7 @@ function App() {
                         <Route path="/booking" element={<Booking />} />
                         <Route path="/gallery" element={<Gallery />} />
                         <Route path="/contact" element={<Contact />} />
+                        <Route path="/admin" element={<Admin />} />
                     </Routes>
                 </main>
                 <Footer />
