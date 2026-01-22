@@ -118,9 +118,9 @@ const Home = () => {
             </section>
 
             {/* Stats Section */}
-            <section className="pt-16 pb-0 reveal">
+            <section className="pt-16 pb-8 reveal">
                 <div className="container mx-auto">
-                    <div className="glass-dark rounded-2xl pt-12 pb-4">
+                    <div className="glass-dark rounded-2xl p-12">
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                             {stats.map((stat, index) => (
                                 <div key={index} className="animate-scale-in">
@@ -137,7 +137,7 @@ const Home = () => {
 
             {/* Recent Projects (Dynamic CMS) */}
             {recentProjects.length > 0 && (
-                <section className="py-4 bg-primary-900 text-white reveal">
+                <section className="py-8 bg-primary-900 text-white reveal">
                     <div className="container mx-auto">
                         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
                             <div>
@@ -172,9 +172,9 @@ const Home = () => {
             )}
 
             {/* CTA Section */}
-            <section className="pt-0 pb-16">
+            <section className="pt-2 pb-16">
                 <div className="container mx-auto">
-                    <div className="glass rounded-2xl pt-4 pb-12 text-center">
+                    <div className="glass rounded-2xl p-12 text-center">
                         <h2 className="text-primary-800 mb-4 font-display">Ready to Start Your Project?</h2>
                         <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
                             Let us help you bring your vision to life. Whether you need quality products or professional services,
