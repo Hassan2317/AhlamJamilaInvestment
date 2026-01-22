@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { optimizeImage } from '../utils/imageOptimizer';
 
 const GalleryGrid = ({ images }) => {
     const [selectedImage, setSelectedImage] = useState(null);
@@ -38,9 +39,10 @@ const GalleryGrid = ({ images }) => {
                     >
                         <div className="relative h-64 overflow-hidden">
                             <img
-                                src={image.image}
+                                src={optimizeImage(image.image, { width: 600 })}
                                 alt={image.title}
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                loading="lazy"
                                 onError={(e) => {
                                     e.target.src = 'https://via.placeholder.com/400x300/4CAF50/ffffff?text=' + encodeURIComponent(image.title);
                                 }}
@@ -64,7 +66,7 @@ const GalleryGrid = ({ images }) => {
                 >
                     <div className="max-w-5xl w-full">
                         <img
-                            src={selectedImage.image}
+                            src={optimizeImage(selectedImage.image, { width: 1200, quality: 90 })}
                             alt={selectedImage.title}
                             className="w-full h-auto rounded-lg shadow-2xl"
                             onError={(e) => {

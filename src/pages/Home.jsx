@@ -4,6 +4,7 @@ import HeroBanner from '../components/HeroBanner';
 import AnimatedCounter from '../components/AnimatedCounter';
 import { FaTree, FaHammer, FaSeedling, FaArrowRight, FaCheckCircle, FaImages } from 'react-icons/fa';
 import { API_BASE } from '../config';
+import { optimizeImage } from '../utils/imageOptimizer';
 
 const Home = () => {
     const [recentProjects, setRecentProjects] = useState([]);
@@ -155,9 +156,10 @@ const Home = () => {
                             {recentProjects.map((project, index) => (
                                 <div key={project._id || index} className="group relative overflow-hidden rounded-2xl aspect-video shadow-2xl animate-fade-in">
                                     <img
-                                        src={project.image}
+                                        src={optimizeImage(project.image, { width: 800 })}
                                         alt={project.title}
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                        loading="lazy"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-6">
                                         <span className="text-accent-400 text-xs font-bold uppercase tracking-widest mb-2">{project.category}</span>

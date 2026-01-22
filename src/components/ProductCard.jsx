@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { FaCheckCircle } from 'react-icons/fa';
+import { optimizeImage } from '../utils/imageOptimizer';
 
 const ProductCard = ({ product }) => {
     return (
@@ -7,9 +8,10 @@ const ProductCard = ({ product }) => {
             {/* Image */}
             <div className="relative h-64 overflow-hidden image-overlay">
                 <img
-                    src={product.image}
+                    src={optimizeImage(product.image, { width: 600 })}
                     alt={product.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
                     onError={(e) => {
                         e.target.src = 'https://via.placeholder.com/400x300/4CAF50/ffffff?text=' + encodeURIComponent(product.name);
                     }}

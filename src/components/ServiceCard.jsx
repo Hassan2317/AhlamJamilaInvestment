@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { FaCheckCircle, FaArrowRight } from 'react-icons/fa';
+import { optimizeImage } from '../utils/imageOptimizer';
 
 const ServiceCard = ({ service }) => {
     return (
@@ -7,11 +8,12 @@ const ServiceCard = ({ service }) => {
             {/* Image */}
             <div className="relative h-72 overflow-hidden image-overlay">
                 <img
-                    src={service.image}
+                    src={optimizeImage(service.image, { width: 800 }) || 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80'}
                     alt={service.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
                     onError={(e) => {
-                        e.target.src = 'https://via.placeholder.com/500x400/5D4037/ffffff?text=' + encodeURIComponent(service.name);
+                        e.target.style.display = 'none';
                     }}
                 />
                 <div className="absolute top-4 left-4 text-6xl opacity-80">
