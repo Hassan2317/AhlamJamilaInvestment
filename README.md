@@ -60,18 +60,7 @@ AhlamJamilaInvestment/
    npm install
    ```
 
-4. **Environment Variables**:
-   Create a `.env` file in the `server` folder:
-   ```env
-   PORT=5000
-   MONGODB_URI=your_mongodb_connection_string
-   SMTP_USER=your_email@gmail.com
-   SMTP_PASS=your_google_app_password
-   ADMIN_PASSWORD=Yatim2317
-   BUSINESS_EMAIL=zaminhassan2317@gmail.com
-   ```
-
-5. **Run Locally**:
+4. **Run Locally**:
    - Start Backend: `cd server && npm run dev`
    - Start Frontend: `npm run dev` (in the root folder)
 
