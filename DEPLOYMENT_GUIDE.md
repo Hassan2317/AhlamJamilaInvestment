@@ -20,7 +20,7 @@ Use these exact settings to ensure your server can find the frontend:
 
 - **Root Directory**: (Leave blank)
 - **Environment**: `Node`
-- **Build Command**: `cd server && npm install`
+- **Build Command**: `npm install && npm run build && cd server && npm install`
 - **Start Command**: `node server/index.js`
 
 ## 4. Set Environment Variables
