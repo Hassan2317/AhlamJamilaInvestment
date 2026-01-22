@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FaBars, FaTimes, FaLeaf } from 'react-icons/fa';
+import { FaBars, FaTimes, FaLeaf, FaLock } from 'react-icons/fa';
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,6 +14,7 @@ const Header = () => {
         { path: '/booking', label: 'Booking' },
         { path: '/gallery', label: 'Gallery' },
         { path: '/contact', label: 'Contact' },
+        { path: '/admin', label: 'Admin', icon: <FaLock className="w-3 h-3 mb-0.5" /> },
     ];
 
     const isActive = (path) => location.pathname === path;
@@ -42,11 +43,14 @@ const Header = () => {
                                 key={link.path}
                                 to={link.path}
                                 className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${isActive(link.path)
-                                        ? 'bg-primary-700 text-white shadow-lg'
-                                        : 'text-gray-700 hover:bg-primary-100 hover:text-primary-800'
+                                    ? 'bg-primary-700 text-white shadow-lg'
+                                    : 'text-gray-700 hover:bg-primary-100 hover:text-primary-800'
                                     }`}
                             >
-                                {link.label}
+                                <span className="flex items-center gap-1.5">
+                                    {link.icon && link.icon}
+                                    {link.label}
+                                </span>
                             </Link>
                         ))}
                     </div>
@@ -79,11 +83,14 @@ const Header = () => {
                                     to={link.path}
                                     onClick={() => setIsMenuOpen(false)}
                                     className={`px-4 py-3 rounded-lg font-medium transition-all duration-300 ${isActive(link.path)
-                                            ? 'bg-primary-700 text-white'
-                                            : 'text-white hover:bg-primary-600'
+                                        ? 'bg-primary-700 text-white'
+                                        : 'text-white hover:bg-primary-600'
                                         }`}
                                 >
-                                    {link.label}
+                                    <span className="flex items-center gap-2">
+                                        {link.icon && link.icon}
+                                        {link.label}
+                                    </span>
                                 </Link>
                             ))}
                             <Link
