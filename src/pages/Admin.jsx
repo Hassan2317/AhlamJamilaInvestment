@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { FaCalendarAlt, FaEnvelope, FaTrash, FaCheckCircle, FaChartLine, FaLock, FaSignOutAlt, FaPlus, FaBox, FaImages, FaSeedling, FaHammer, FaCopy } from 'react-icons/fa';
+import { FaCalendarAlt, FaEnvelope, FaTrash, FaCheckCircle, FaChartLine, FaLock, FaSignOutAlt, FaPlus, FaBox, FaImages, FaSeedling, FaHammer, FaCopy, FaEdit } from 'react-icons/fa';
 import { products as staticProducts } from '../data/products';
 import { galleryImages as staticGallery } from '../data/gallery';
 import { services as staticServices } from '../data/services';
 import { API_BASE, ADMIN_API } from '../config';
+import { convertFileToBase64 } from '../utils/fileHelpers';
 
 const Admin = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -19,6 +20,9 @@ const Admin = () => {
 
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState({});
+    const [isEditing, setIsEditing] = useState(false);
+    const [editId, setEditId] = useState(null);
+    const [uploading, setUploading] = useState(false);
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -106,8 +110,11 @@ const Admin = () => {
         const endpoint = activeTab;
 
         try {
-            const res = await fetch(`${ADMIN_API}/${endpoint}`, {
-                method: 'POST',
+            const method = isEditing ? 'PUT' : 'POST';
+            const url = isEditing ? `${ADMIN_API}/${endpoint}/${editId}` : `${ADMIN_API}/${endpoint}`;
+
+            const res = await fetch(url, {
+                method: method,
                 headers: {
                     'Content-Type': 'application/json',
                     'password': adminKey
@@ -116,11 +123,21 @@ const Admin = () => {
             });
             const data = await res.json();
             if (data.success) {
-                if (activeTab === 'products') setProducts([data.data, ...products]);
-                else if (activeTab === 'gallery') setGallery([data.data, ...gallery]);
-                else if (activeTab === 'services') setServices([data.data, ...services]);
+                if (isEditing) {
+                    if (activeTab === 'products') setProducts(products.map(p => p._id === editId ? data.data : p));
+                    else if (activeTab === 'gallery') setGallery(gallery.map(g => g._id === editId ? data.data : g));
+                    else if (activeTab === 'services') setServices(services.map(s => s._id === editId ? data.data : s));
+                    alert('Item updated successfully');
+                } else {
+                    if (activeTab === 'products') setProducts([data.data, ...products]);
+                    else if (activeTab === 'gallery') setGallery([data.data, ...gallery]);
+                    else if (activeTab === 'services') setServices([data.data, ...services]);
+                    alert('Item added successfully');
+                }
                 setShowForm(false);
                 setFormData({});
+                setIsEditing(false);
+                setEditId(null);
             }
         } catch (err) {
             console.error('Submit error:', err);
@@ -147,6 +164,71 @@ const Admin = () => {
             console.error('Delete error:', err);
         }
     };
+
+    const handleEdit = (item) => {
+        setFormData(item);
+        setEditId(item._id);
+        setIsEditing(true);
+        setShowForm(true);
+        // Ensure we are on the correct tab
+        // (The button is inside the tab content, so activeTab should already be correct)
+    };
+
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setUploading(true);
+        try {
+            const base64 = await convertFileToBase64(file);
+            setFormData(prev => ({ ...prev, image: base64 }));
+        } catch (err) {
+            console.error('Image processing error:', err);
+            alert('Failed to process image');
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    const ImageInput = ({ value, onChange }) => (
+        <div className="space-y-2">
+            <label className="block text-sm font-bold text-gray-700">Image</label>
+            <div className="flex gap-4 items-start">
+                <div className="flex-1">
+                    <div className="relative">
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            className="block w-full text-sm text-gray-500
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-full file:border-0
+                                file:text-sm file:font-semibold
+                                file:bg-primary-50 file:text-primary-700
+                                hover:file:bg-primary-100
+                            "
+                        />
+                        {uploading && <div className="absolute top-0 right-0 text-xs text-primary-600 font-bold">Compressing...</div>}
+                    </div>
+                    <div className="mt-2 text-center text-xs text-gray-500 border-t pt-2">
+                        <span className="bg-white px-2 relative -top-4">OR</span>
+                        <input
+                            type="text"
+                            placeholder="Paste Image URL directly"
+                            value={value || ''}
+                            onChange={onChange}
+                            className="w-full text-xs p-2 border rounded"
+                        />
+                    </div>
+                </div>
+                {value && (
+                    <div className="w-20 h-20 rounded-lg overflow-hidden border border-gray-200 shadow-sm flex-shrink-0 bg-gray-50">
+                        <img src={value} alt="Preview" className="w-full h-full object-cover" />
+                    </div>
+                )}
+            </div>
+        </div>
+    );
 
     const updateBookingStatus = async (id, newStatus) => {
         try {
@@ -228,7 +310,7 @@ const Admin = () => {
                     {['bookings', 'contacts', 'products', 'gallery', 'services', 'media'].map(t => (
                         <button
                             key={t}
-                            onClick={() => { setActiveTab(t); setShowForm(false); }}
+                            onClick={() => { setActiveTab(t); setShowForm(false); setIsEditing(false); setFormData({}); }}
                             className={`px-6 py-2 rounded-xl font-bold transition-all capitalize ${activeTab === t ? 'bg-primary-700 text-white shadow-lg' : 'hover:bg-white/40 text-gray-700'}`}
                         >
                             {t}
@@ -241,7 +323,11 @@ const Admin = () => {
                     <h2 className="text-2xl font-bold text-primary-800 capitalize">{activeTab} List</h2>
                     {(activeTab !== 'bookings' && activeTab !== 'contacts' && activeTab !== 'media') && (
                         <button
-                            onClick={() => setShowForm(!showForm)}
+                            onClick={() => {
+                                setShowForm(!showForm);
+                                setIsEditing(false);
+                                setFormData({});
+                            }}
                             className="btn-primary flex items-center gap-2 py-2 px-4 text-sm"
                         >
                             <FaPlus /> Add New {activeTab.slice(0, -1)}
@@ -252,31 +338,35 @@ const Admin = () => {
                 {/* Dynamic Form */}
                 {showForm && (
                     <div className="glass p-8 rounded-2xl mb-8 animate-slide-up">
+                        <div className="mb-4">
+                            <h3 className="font-bold text-lg text-primary-800">{isEditing ? `Edit ${activeTab.slice(0, -1)}` : `Add New ${activeTab.slice(0, -1)}`}</h3>
+                        </div>
                         <form onSubmit={handleSubmitCMS} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {activeTab === 'products' ? (
                                 <>
-                                    <input type="text" placeholder="Name" required onChange={e => setFormData({ ...formData, name: e.target.value })} />
-                                    <input type="text" placeholder="Category" required onChange={e => setFormData({ ...formData, category: e.target.value })} />
-                                    <input type="text" placeholder="Image URL" required onChange={e => setFormData({ ...formData, image: e.target.value })} />
-                                    <textarea placeholder="Description" onChange={e => setFormData({ ...formData, description: e.target.value })} className="md:col-span-2" />
+                                    <input type="text" placeholder="Name" required value={formData.name || ''} onChange={e => setFormData({ ...formData, name: e.target.value })} />
+                                    <input type="text" placeholder="Category" required value={formData.category || ''} onChange={e => setFormData({ ...formData, category: e.target.value })} />
+                                    <ImageInput value={formData.image} onChange={e => setFormData({ ...formData, image: e.target.value })} />
+                                    <textarea placeholder="Description" value={formData.description || ''} onChange={e => setFormData({ ...formData, description: e.target.value })} className="md:col-span-2" />
                                 </>
                             ) : activeTab === 'gallery' ? (
                                 <>
-                                    <input type="text" placeholder="Title" required onChange={e => setFormData({ ...formData, title: e.target.value })} />
-                                    <input type="text" placeholder="Category" required onChange={e => setFormData({ ...formData, category: e.target.value })} />
-                                    <input type="text" placeholder="Image URL" required onChange={e => setFormData({ ...formData, image: e.target.value })} />
-                                    <textarea placeholder="Description" onChange={e => setFormData({ ...formData, description: e.target.value })} className="md:col-span-2" />
+                                    <input type="text" placeholder="Title" required value={formData.title || ''} onChange={e => setFormData({ ...formData, title: e.target.value })} />
+                                    <input type="text" placeholder="Category" required value={formData.category || ''} onChange={e => setFormData({ ...formData, category: e.target.value })} />
+                                    <ImageInput value={formData.image} onChange={e => setFormData({ ...formData, image: e.target.value })} />
+                                    <textarea placeholder="Description" value={formData.description || ''} onChange={e => setFormData({ ...formData, description: e.target.value })} className="md:col-span-2" />
                                 </>
                             ) : (
                                 <>
-                                    <input type="text" placeholder="Service Title" required onChange={e => setFormData({ ...formData, title: e.target.value })} />
-                                    <input type="text" placeholder="Icon Emoji (e.g. 🏗️)" required onChange={e => setFormData({ ...formData, icon: e.target.value })} />
-                                    <textarea placeholder="Description" required onChange={e => setFormData({ ...formData, description: e.target.value })} className="md:col-span-2" />
+                                    <input type="text" placeholder="Service Title" required value={formData.title || ''} onChange={e => setFormData({ ...formData, title: e.target.value })} />
+                                    <input type="text" placeholder="Icon Emoji (e.g. 🏗️)" required value={formData.icon || ''} onChange={e => setFormData({ ...formData, icon: e.target.value })} />
+                                    <ImageInput value={formData.image} onChange={e => setFormData({ ...formData, image: e.target.value })} />
+                                    <textarea placeholder="Description" required value={formData.description || ''} onChange={e => setFormData({ ...formData, description: e.target.value })} className="md:col-span-2" />
                                 </>
                             )}
                             <div className="md:col-span-2 flex justify-end gap-4">
-                                <button type="button" onClick={() => setShowForm(false)} className="btn-outline py-2">Cancel</button>
-                                <button type="submit" className="btn-primary py-2 px-8">Save {activeTab.slice(0, -1)}</button>
+                                <button type="button" onClick={() => { setShowForm(false); setIsEditing(false); setFormData({}); }} className="btn-outline py-2">Cancel</button>
+                                <button type="submit" className="btn-primary py-2 px-8">{isEditing ? 'Update' : 'Save'} {activeTab.slice(0, -1)}</button>
                             </div>
                         </form>
                     </div>
@@ -290,9 +380,9 @@ const Admin = () => {
                         <div className="overflow-x-auto">
                             {activeTab === 'bookings' && <BookingsTable data={bookings} updateStatus={updateBookingStatus} deleteItem={deleteItem} />}
                             {activeTab === 'contacts' && <ContactsTable data={contacts} deleteItem={deleteItem} />}
-                            {activeTab === 'products' && <ProductsTable data={products} deleteItem={deleteItem} />}
-                            {activeTab === 'gallery' && <GalleryTable data={gallery} deleteItem={deleteItem} />}
-                            {activeTab === 'services' && <ServicesTable data={services} deleteItem={deleteItem} />}
+                            {activeTab === 'products' && <ProductsTable data={products} deleteItem={deleteItem} editItem={handleEdit} />}
+                            {activeTab === 'gallery' && <GalleryTable data={gallery} deleteItem={deleteItem} editItem={handleEdit} />}
+                            {activeTab === 'services' && <ServicesTable data={services} deleteItem={deleteItem} editItem={handleEdit} />}
                             {activeTab === 'media' && <MediaTable products={products} gallery={gallery} services={services} />}
                         </div>
                     )}
@@ -323,6 +413,7 @@ const BookingsTable = ({ data, updateStatus, deleteItem }) => (
     <table className="w-full text-left">
         <thead className="bg-primary-50 text-primary-800 uppercase text-xs font-bold">
             <tr>
+                <th className="p-4">Date</th>
                 <th className="p-4">Customer</th>
                 <th className="p-4">Service</th>
                 <th className="p-4">Status</th>
@@ -332,6 +423,11 @@ const BookingsTable = ({ data, updateStatus, deleteItem }) => (
         <tbody>
             {data.map(item => (
                 <tr key={item._id} className="border-t border-gray-100/50 hover:bg-white/40 transition-colors">
+                    <td className="p-4 text-xs font-mono text-gray-500">
+                        {new Date(item.createdAt).toLocaleDateString()}
+                        <br />
+                        {new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </td>
                     <td className="p-4">
                         <p className="font-bold text-gray-800">{item.name}</p>
                         <p className="text-xs text-gray-500">{item.email} • {item.phone}</p>
@@ -362,6 +458,7 @@ const ContactsTable = ({ data, deleteItem }) => (
     <table className="w-full text-left">
         <thead className="bg-primary-50 text-primary-800 uppercase text-xs font-bold">
             <tr>
+                <th className="p-4">Date</th>
                 <th className="p-4">From</th>
                 <th className="p-4">Subject</th>
                 <th className="p-4">Message</th>
@@ -371,6 +468,11 @@ const ContactsTable = ({ data, deleteItem }) => (
         <tbody>
             {data.map(item => (
                 <tr key={item._id} className="border-t border-gray-100/50 hover:bg-white/40">
+                    <td className="p-4 text-xs font-mono text-gray-500">
+                        {new Date(item.createdAt).toLocaleDateString()}
+                        <br />
+                        {new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </td>
                     <td className="p-4"><p className="font-bold">{item.name}</p><p className="text-xs text-gray-500">{item.email}</p></td>
                     <td className="p-4 text-xs font-bold">{item.subject}</td>
                     <td className="p-4"><p className="text-sm line-clamp-2 max-w-xs">{item.message}</p></td>
@@ -381,7 +483,7 @@ const ContactsTable = ({ data, deleteItem }) => (
     </table>
 );
 
-const ProductsTable = ({ data, deleteItem }) => (
+const ProductsTable = ({ data, deleteItem, editItem }) => (
     <table className="w-full text-left">
         <thead className="bg-primary-50 text-primary-800 uppercase text-xs font-bold">
             <tr>
@@ -400,14 +502,19 @@ const ProductsTable = ({ data, deleteItem }) => (
                     </td>
                     <td className="p-4 text-xs">{item.category}</td>
                     <td className="p-4 text-xs text-gray-500 max-w-xs truncate">{item.description}</td>
-                    <td className="p-4"><button onClick={() => deleteItem('products', item._id)} className="text-red-400"><FaTrash /></button></td>
+                    <td className="p-4">
+                        <div className="flex gap-2">
+                            <button onClick={() => editItem(item)} className="text-blue-400 hover:text-blue-600"><FaEdit /></button>
+                            <button onClick={() => deleteItem('products', item._id)} className="text-red-400 hover:text-red-600"><FaTrash /></button>
+                        </div>
+                    </td>
                 </tr>
             ))}
         </tbody>
     </table>
 );
 
-const GalleryTable = ({ data, deleteItem }) => (
+const GalleryTable = ({ data, deleteItem, editItem }) => (
     <table className="w-full text-left">
         <thead className="bg-primary-50 text-primary-800 uppercase text-xs font-bold">
             <tr>
@@ -423,14 +530,19 @@ const GalleryTable = ({ data, deleteItem }) => (
                     <td className="p-4"><img src={item.image} alt="" className="w-12 h-8 rounded object-cover shadow-sm" /></td>
                     <td className="p-4 font-bold">{item.title}</td>
                     <td className="p-4 text-xs">{item.category}</td>
-                    <td className="p-4"><button onClick={() => deleteItem('gallery', item._id)} className="text-red-400"><FaTrash /></button></td>
+                    <td className="p-4">
+                        <div className="flex gap-2">
+                            <button onClick={() => editItem(item)} className="text-blue-400 hover:text-blue-600"><FaEdit /></button>
+                            <button onClick={() => deleteItem('gallery', item._id)} className="text-red-400 hover:text-red-600"><FaTrash /></button>
+                        </div>
+                    </td>
                 </tr>
             ))}
         </tbody>
     </table>
 );
 
-const ServicesTable = ({ data, deleteItem }) => (
+const ServicesTable = ({ data, deleteItem, editItem }) => (
     <table className="w-full text-left">
         <thead className="bg-primary-50 text-primary-800 uppercase text-xs font-bold">
             <tr>
@@ -449,7 +561,12 @@ const ServicesTable = ({ data, deleteItem }) => (
                         </div>
                     </td>
                     <td className="p-4 text-xs text-gray-500">{item.description}</td>
-                    <td className="p-4"><button onClick={() => deleteItem('services', item._id)} className="text-red-400"><FaTrash /></button></td>
+                    <td className="p-4">
+                        <div className="flex gap-2">
+                            <button onClick={() => editItem(item)} className="text-blue-400 hover:text-blue-600"><FaEdit /></button>
+                            <button onClick={() => deleteItem('services', item._id)} className="text-red-400 hover:text-red-600"><FaTrash /></button>
+                        </div>
+                    </td>
                 </tr>
             ))}
         </tbody>

@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../dist')));
@@ -268,6 +268,50 @@ app.delete('/api/admin/services/:id', adminAuth, async (req, res) => {
     try {
         await Service.findByIdAndDelete(req.params.id);
         res.json({ success: true, message: 'Service deleted' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// --- UPDATE Endpoints (PUT) ---
+
+// PUT update product
+app.put('/api/admin/products/:id', adminAuth, async (req, res) => {
+    try {
+        const updatedProduct = await Product.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+        res.json({ success: true, data: updatedProduct });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// PUT update gallery item
+app.put('/api/admin/gallery/:id', adminAuth, async (req, res) => {
+    try {
+        const updatedItem = await Gallery.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+        res.json({ success: true, data: updatedItem });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// PUT update service
+app.put('/api/admin/services/:id', adminAuth, async (req, res) => {
+    try {
+        const updatedService = await Service.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+        res.json({ success: true, data: updatedService });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }

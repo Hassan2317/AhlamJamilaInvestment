@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import ServiceCard from '../components/ServiceCard';
-import { services as staticServices } from '../data/services';
 import { Link } from 'react-router-dom';
 import { API_BASE } from '../config';
 
 const Services = () => {
-    const [services, setServices] = useState(staticServices);
+    const [services, setServices] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -13,11 +12,8 @@ const Services = () => {
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    const blacklistedTitles = ['Culvert & House Construction', 'Bridge Construction', 'Landscaping & Garden Design'];
-                    const dbServices = data.data.filter(s => !blacklistedTitles.includes(s.title));
-                    const dbTitles = new Set(dbServices.map(s => s.title));
-                    const uniqueStatic = staticServices.filter(s => !dbTitles.has(s.name));
-                    setServices([...dbServices.map(s => ({ ...s, name: s.title })), ...uniqueStatic]);
+                    // Map title to name for ServiceCard compatibility
+                    setServices(data.data.map(s => ({ ...s, name: s.title })));
                 }
             })
             .catch(err => console.error('Error fetching services:', err))

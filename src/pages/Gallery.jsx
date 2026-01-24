@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import GalleryGrid from '../components/GalleryGrid';
-import { galleryImages as staticGallery } from '../data/gallery';
 import { API_BASE } from '../config';
 
 const Gallery = () => {
-    const [images, setImages] = useState(staticGallery);
+    const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -12,10 +11,7 @@ const Gallery = () => {
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    const dbImages = data.data;
-                    const dbTitles = new Set(dbImages.map(img => img.title));
-                    const uniqueStatic = staticGallery.filter(img => !dbTitles.has(img.title));
-                    setImages([...dbImages, ...uniqueStatic]);
+                    setImages(data.data);
                 }
             })
             .catch(err => console.error('Error fetching gallery:', err))

@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import ProductCard from '../components/ProductCard';
-import { products as staticProducts } from '../data/products';
 import { API_BASE } from '../config';
 
 const Products = () => {
-    const [products, setProducts] = useState(staticProducts);
+    const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState('All');
 
@@ -13,10 +12,7 @@ const Products = () => {
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    const dbProducts = data.data;
-                    const dbNames = new Set(dbProducts.map(p => p.name));
-                    const uniqueStatic = staticProducts.filter(p => !dbNames.has(p.name));
-                    setProducts([...dbProducts, ...uniqueStatic]);
+                    setProducts(data.data);
                 }
             })
             .catch(err => console.error('Error fetching products:', err))
