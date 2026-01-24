@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FaCalendarAlt, FaEnvelope, FaTrash, FaCheckCircle, FaChartLine, FaLock, FaSignOutAlt, FaPlus, FaBox, FaImages, FaSeedling, FaHammer } from 'react-icons/fa';
+import { FaCalendarAlt, FaEnvelope, FaTrash, FaCheckCircle, FaChartLine, FaLock, FaSignOutAlt, FaPlus, FaBox, FaImages, FaSeedling, FaHammer, FaCopy } from 'react-icons/fa';
 import { products as staticProducts } from '../data/products';
 import { galleryImages as staticGallery } from '../data/gallery';
 import { services as staticServices } from '../data/services';
@@ -36,14 +36,6 @@ const Admin = () => {
         setPassword('');
         sessionStorage.removeItem('adminKey');
     };
-
-    // Removed auto-login check to ensure password is required every time the page is visited
-    // useEffect(() => {
-    //     const savedKey = sessionStorage.getItem('adminKey');
-    //     if (savedKey === 'Yatim2317') {
-    //         setIsAuthenticated(true);
-    //     }
-    // }, []);
 
 
     useEffect(() => {
@@ -233,7 +225,7 @@ const Admin = () => {
 
                 {/* Tabs */}
                 <div className="flex flex-wrap gap-2 mb-8 bg-white/20 p-2 rounded-2xl backdrop-blur-sm">
-                    {['bookings', 'contacts', 'products', 'gallery', 'services'].map(t => (
+                    {['bookings', 'contacts', 'products', 'gallery', 'services', 'media'].map(t => (
                         <button
                             key={t}
                             onClick={() => { setActiveTab(t); setShowForm(false); }}
@@ -247,7 +239,7 @@ const Admin = () => {
                 {/* Content Header */}
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-bold text-primary-800 capitalize">{activeTab} List</h2>
-                    {(activeTab !== 'bookings' && activeTab !== 'contacts') && (
+                    {(activeTab !== 'bookings' && activeTab !== 'contacts' && activeTab !== 'media') && (
                         <button
                             onClick={() => setShowForm(!showForm)}
                             className="btn-primary flex items-center gap-2 py-2 px-4 text-sm"
@@ -301,6 +293,7 @@ const Admin = () => {
                             {activeTab === 'products' && <ProductsTable data={products} deleteItem={deleteItem} />}
                             {activeTab === 'gallery' && <GalleryTable data={gallery} deleteItem={deleteItem} />}
                             {activeTab === 'services' && <ServicesTable data={services} deleteItem={deleteItem} />}
+                            {activeTab === 'media' && <MediaTable products={products} gallery={gallery} services={services} />}
                         </div>
                     )}
                 </div>
@@ -462,5 +455,61 @@ const ServicesTable = ({ data, deleteItem }) => (
         </tbody>
     </table>
 );
+
+const MediaTable = ({ products, gallery, services }) => {
+    // Collect all unique images from products, gallery, and services
+    const allImages = [];
+    const seen = new Set();
+
+    const addImage = (path, source) => {
+        if (path && !seen.has(path)) {
+            seen.add(path);
+            allImages.push({ path, source });
+        }
+    };
+
+    products.forEach(p => addImage(p.image, 'Product'));
+    gallery.forEach(g => addImage(g.image, 'Gallery'));
+    services.forEach(s => addImage(s.image, 'Service'));
+
+    const copyToClipboard = (text) => {
+        navigator.clipboard.writeText(text);
+        alert('Image path copied: ' + text);
+    };
+
+    return (
+        <table className="w-full text-left">
+            <thead className="bg-primary-50 text-primary-800 uppercase text-xs font-bold">
+                <tr>
+                    <th className="p-4">Preview</th>
+                    <th className="p-4">Path</th>
+                    <th className="p-4">Source</th>
+                    <th className="p-4">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {allImages.map((img, idx) => (
+                    <tr key={idx} className="border-t border-gray-100/50 hover:bg-white/40">
+                        <td className="p-4">
+                            <img src={img.path} alt="" className="w-12 h-12 rounded object-cover border p-1 bg-white shadow-sm" />
+                        </td>
+                        <td className="p-4 font-mono text-[10px] break-all max-w-[200px]">{img.path}</td>
+                        <td className="p-4">
+                            <span className="text-[10px] font-bold bg-white/60 px-2 py-1 rounded border border-gray-200 uppercase">{img.source}</span>
+                        </td>
+                        <td className="p-4">
+                            <button
+                                onClick={() => copyToClipboard(img.path)}
+                                className="text-primary-600 hover:text-primary-800 flex items-center gap-1 text-xs font-bold transition-colors"
+                            >
+                                <FaCopy /> Copy Path
+                            </button>
+                        </td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    );
+};
 
 export default Admin;
