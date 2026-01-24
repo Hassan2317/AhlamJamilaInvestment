@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -12,8 +12,13 @@ import Gallery from './pages/Gallery';
 import Contact from './pages/Contact';
 import Admin from './pages/Admin';
 
-function App() {
+function ScrollReveal() {
+    const { pathname } = useLocation();
+
     useEffect(() => {
+        // Scroll to top on route change
+        window.scrollTo(0, 0);
+
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -27,15 +32,31 @@ function App() {
             });
         }, observerOptions);
 
-        const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
-        revealElements.forEach(el => observer.observe(el));
+        // Slight delay to ensure DOM is updated after route change
+        const timer = setTimeout(() => {
+            const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+            revealElements.forEach(el => {
+                // Remove active class first to re-trigger if navigating back
+                el.classList.remove('active');
+                observer.observe(el);
+            });
+        }, 100);
 
-        return () => observer.disconnect();
-    }, []);
+        return () => {
+            observer.disconnect();
+            clearTimeout(timer);
+        };
+    }, [pathname]);
+
+    return null;
+}
+
+function App() {
 
     return (
         <Router>
             <div className="min-h-screen flex flex-col relative">
+                <ScrollReveal />
                 <div className="animated-bg"></div>
                 <Header />
                 <main className="flex-grow">
