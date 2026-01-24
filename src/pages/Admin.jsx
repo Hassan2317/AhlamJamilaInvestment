@@ -285,7 +285,7 @@ const Admin = () => {
         <div className="section-padding min-h-screen">
             <div className="container mx-auto">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
-                    <h1 className="text-4xl font-bold text-primary-800 font-display">Admin CMS</h1>
+                    <h1 className="text-4xl font-bold text-primary-800 font-display">Ahlam Jamila Admin Pannel</h1>
                     <div className="flex gap-4">
                         <button onClick={handleSeed} className="btn-outline flex items-center gap-2 text-xs py-2">
                             <FaSeedling /> Force Master Sync
