@@ -1,46 +1,48 @@
 export const galleryImages = [
-    {
-        id: 1,
-        title: 'Completed Bridge Project',
-        category: 'Infrastructure',
-        image: 'https://images.unsplash.com/photo-1758383965517-4fe688c69ed2?w=800&q=80',
-        description: 'Modern bridge construction over river'
-    },
-    {
-        id: 2,
-        title: 'Residential Home',
-        category: 'Construction',
-        image: 'https://images.unsplash.com/photo-1768200498972-fd56353d73fc?w=800&q=80',
-        description: 'Beautiful family home completed in 2025'
-    },
-    {
-        id: 3,
-        title: 'Garden Landscape',
-        category: 'Landscaping',
-        image: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80',
-        description: 'Luxury garden design with water features'
-    },
-    {
-        id: 4,
-        title: 'Orchard Plantation',
-        category: 'Agriculture',
-        image: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&q=80',
-        description: 'Commercial orchard with 500+ trees'
-    },
-    {
-        id: 5,
-        title: 'Culvert System',
-        category: 'Infrastructure',
-        image: 'https://images.unsplash.com/photo-1758383965517-4fe688c69ed2?w=800&q=80',
-        description: 'Drainage culvert installation'
-    },
-    {
-        id: 6,
-        title: 'Flower Garden',
-        category: 'Landscaping',
-        image: 'https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=800&q=80',
-        description: 'Colorful flower garden arrangement'
-    }
+    { id: 1, title: 'Apples Orchard', category: 'Agriculture', image: '/images/Apples 🍎.jpg', description: 'Freshly harvested apples from our orchard' },
+    { id: 2, title: 'Banana Plantation', category: 'Agriculture', image: '/images/Banana 🍌.jpg', description: 'Healthy banana trees in our plantation' },
+    { id: 3, title: 'Premium Bananas', category: 'Agriculture', image: '/images/Bananas.jpg', description: 'High-quality bananas ready for market' },
+    { id: 4, title: 'Quality Bricks', category: 'Construction', image: '/images/Bricks 2.jpg', description: 'Durable cement blocks for construction' },
+    { id: 5, title: 'Stacked Bricks', category: 'Construction', image: '/images/Bricks 3.jpg', description: 'Inventory of high-strength bricks' },
+    { id: 6, title: 'Construction Bricks', category: 'Construction', image: '/images/Bricks 4.jpg', description: 'Perfectly cured cement blocks' },
+    { id: 7, title: 'Bulk Bricks', category: 'Construction', image: '/images/Bricks 5.jpg', description: 'Large scale supply of construction blocks' },
+    { id: 8, title: 'Finished Bricks', category: 'Construction', image: '/images/Bricks 6.jpg', description: 'Ready to use cement blocks' },
+    { id: 9, title: 'Standard Bricks', category: 'Construction', image: '/images/Bricks.jpg', description: 'Our signature high-quality bricks' },
+    { id: 10, title: 'Variety Seedlings', category: 'Agriculture', image: '/images/Different Seedlings.jpg', description: 'Diverse range of healthy seedlings' },
+    { id: 11, title: 'Ornamental Seedlings', category: 'Agriculture', image: '/images/Different seedlings 🌱.jpg', description: 'Beautiful seedlings for landscaping' },
+    { id: 12, title: 'Fruit Tree Seedlings', category: 'Agriculture', image: '/images/Fruit Seedlings 🌱.jpg', description: 'Premium fruit-bearing tree seedlings' },
+    { id: 13, title: 'Assorted Fruits', category: 'Agriculture', image: '/images/Fruits.jpg', description: 'Fresh produce from our agricultural projects' },
+    { id: 14, title: 'House Construction', category: 'Construction', image: '/images/Houses Construction 🚧.jpg', description: 'Modern home construction in progress' },
+    { id: 15, title: 'Completed House', category: 'Construction', image: '/images/Houses 🏠.jpg', description: 'Beautifully finished residential project' },
+    { id: 16, title: 'Project Location', category: 'Infrastructure', image: '/images/Location.jpg', description: 'Strategic site for infrastructure development' },
+    { id: 17, title: 'Mango Nursery', category: 'Agriculture', image: '/images/Mango Seedings 🥭.jpg', description: 'Healthy mango tree seedlings' },
+    { id: 18, title: 'Mango Harvest', category: 'Agriculture', image: '/images/Mango 🥭 🥭 🥭.jpg', description: 'Plentiful mango harvest' },
+    { id: 19, title: 'Fresh Mangoes', category: 'Agriculture', image: '/images/Mango 🥭.jpg', description: 'Organic mangoes from our farm' },
+    { id: 20, title: 'Mango Trees', category: 'Agriculture', image: '/images/Mango.jpg', description: 'Mature mango trees in our orchard' },
+    { id: 21, title: 'Quality Mangoes', category: 'Agriculture', image: '/images/Mangoes.jpg', description: 'Export-quality freshly picked mangoes' },
+    { id: 22, title: 'Bridge Project 2', category: 'Infrastructure', image: '/images/Masiku 2.jpg', description: 'Ongoing bridge construction work' },
+    { id: 23, title: 'Masiku Bridge', category: 'Infrastructure', image: '/images/Masiku.jpg', description: 'Major bridge infrastructure completed' },
+    { id: 24, title: 'Modern Construction Bricks', category: 'Construction', image: '/images/Modern Bricks.jpg', description: 'State-of-the-art building blocks' },
+    { id: 25, title: 'Crop Varieties', category: 'Agriculture', image: '/images/Multiple Varieties.jpg', description: 'Scientific crop variety testing' },
+    { id: 26, title: 'Local Bananas', category: 'Agriculture', image: '/images/Nthochi 2.jpg', description: 'Locally adapted banana varieties' },
+    { id: 27, title: 'Nthochi Plantation', category: 'Agriculture', image: '/images/Nthochi.jpg', description: 'Sustainable banana farming' },
+    { id: 28, title: 'Orange Grove', category: 'Agriculture', image: '/images/Oranges 🍊.jpg', description: 'Sun-ripened oranges in the orchard' },
+    { id: 29, title: 'Papaya Nursery', category: 'Agriculture', image: '/images/Papaya Seedlings 🌱.jpg', description: 'Fast-growing papaya seedlings' },
+    { id: 30, title: 'Pineapple Farm', category: 'Agriculture', image: '/images/Pineapples.jpg', description: 'Tropical pineapple plantation' },
+    { id: 31, title: 'Bulk Seedlings', category: 'Agriculture', image: '/images/Plenty Seedlings 🌱.jpg', description: 'Mass production of high-quality seedlings' },
+    { id: 32, title: 'Seedling Nursery', category: 'Agriculture', image: '/images/Seedlings 3.jpg', description: 'Modern nursery environment' },
+    { id: 33, title: 'Young Plants', category: 'Agriculture', image: '/images/Seedlings 🌱 3.jpg', description: 'Healthy young seedlings' },
+    { id: 34, title: 'Commercial Seedlings', category: 'Agriculture', image: '/images/Seedlings 🌱 47.jpg', description: 'Seedlings for commercial agriculture' },
+    { id: 35, title: 'Small-Scale Nursery', category: 'Agriculture', image: '/images/Seedlings 🌱 🌱 46.jpg', description: 'Community nursery project' },
+    // { id: 36, title: 'Garden Landscape', category: 'Landscaping', image: '/images/Seedlings 🌱 🌱 🌱 🌱 🌱 🌱 7.jpg', description: 'Professional garden landscaping project' },
+    { id: 37, title: 'Nursery Stock', category: 'Agriculture', image: '/images/Seedlings 🌱 🌱 🌱 🌱 🌱 🌱.jpg', description: 'Vast selection of nursery stock' },
+    { id: 38, title: 'Healthy Greens', category: 'Agriculture', image: '/images/Seedlings 🌱 🌱 🌱 🌱.jpg', description: 'Lush green seedlings' },
+    { id: 39, title: 'Developing Seedlings', category: 'Agriculture', image: '/images/Seedlings 🌱 🌱.jpg', description: 'Well-developed seedling stock' },
+    { id: 40, title: 'Young Sprouts', category: 'Agriculture', image: '/images/Seedlings 🌱.jpg', description: 'Early stage healthy sprouts' },
+    { id: 41, title: 'Ready to Plant', category: 'Agriculture', image: '/images/Seedlings.jpg', description: 'Seedlings ready for open field planting' },
+    { id: 42, title: 'Agricultural Innovations', category: 'Agriculture', image: '/images/Seedlingz.jpg', description: 'New varieties of seedlings' },
+    { id: 43, title: 'Growing Seedlings', category: 'Agriculture', image: '/images/seedlings 🌱 🌱 🌱.jpg', description: 'Carefully nurtured agriculture stock' },
+    { id: 44, title: 'Fruit Varieties', category: 'Agriculture', image: '/images/varieties.jpg', description: 'Multiple fruit varieties display' }
 ];
 
 

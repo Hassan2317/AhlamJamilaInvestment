@@ -4,7 +4,7 @@ export const products = [
         name: 'Orchard Trees',
         category: 'Trees',
         description: 'Premium quality fruit-bearing trees for orchards. Healthy, disease-resistant varieties perfect for commercial and residential planting.',
-        image: '/images/orchard-trees.jpg',
+        image: '/images/Fruit Seedlings 🌱.jpg',
         features: ['Disease-resistant', 'High yield', 'Multiple varieties', 'Expert consultation']
     },
     {
@@ -12,7 +12,7 @@ export const products = [
         name: 'Natural Trees',
         category: 'Trees',
         description: 'Beautiful indigenous and exotic trees for landscaping and environmental projects. Enhance your property with mature, healthy trees.',
-        image: '/images/natural-trees.jpg',
+        image: '/images/Plenty Seedlings 🌱.jpg',
         features: ['Mature specimens', 'Native species', 'Shade trees', 'Ornamental varieties']
     },
     {
@@ -20,7 +20,7 @@ export const products = [
         name: 'Cement Blocks',
         category: 'Construction Materials',
         description: 'High-strength cement blocks manufactured to international standards. Perfect for residential and commercial construction projects.',
-        image: '/images/cement-blocks.jpg',
+        image: '/images/Bricks.jpg',
         features: ['High compressive strength', 'Uniform dimensions', 'Durable', 'Cost-effective']
     },
     {
@@ -28,7 +28,7 @@ export const products = [
         name: 'Culvert Rings',
         category: 'Construction Materials',
         description: 'Reinforced concrete culvert rings for drainage systems, septic tanks, and water management infrastructure.',
-        image: '/images/culvert-rings.jpg',
+        image: '/images/Modern Bricks.jpg',
         features: ['Reinforced concrete', 'Various sizes', 'Weather-resistant', 'Long-lasting']
     },
     {
@@ -36,7 +36,7 @@ export const products = [
         name: 'Flowers & Plants',
         category: 'Landscaping',
         description: 'Vibrant flowers and ornamental plants to beautify your gardens, events, and outdoor spaces. Fresh, healthy, and carefully nurtured.',
-        image: '/images/flowers.jpg',
+        image: '/images/Different seedlings 🌱.jpg',
         features: ['Seasonal varieties', 'Event decoration', 'Garden plants', 'Custom arrangements']
     }
 ];
