@@ -93,10 +93,9 @@ const Booking = () => {
                                     dbServices.map((s, idx) => <li key={idx} className="font-bold">• {s}</li>)
                                 ) : (
                                     <>
-                                        <li>• Bridge Construction</li>
                                         <li>• House Construction</li>
-                                        <li>• Culvert Systems</li>
-                                        <li>• Landscaping Design</li>
+                                        <li>• Culvert Construction</li>
+                                        <li>• Landscaping & Gardening</li>
                                     </>
                                 )}
                                 <li>• Custom Projects</li>

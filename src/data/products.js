@@ -1,42 +1,120 @@
 export const products = [
+    // --- Fruits & Produce ---
     {
         id: 1,
-        name: 'Orchard Trees',
-        category: 'Trees',
-        description: 'Premium quality fruit-bearing trees for orchards. Healthy, disease-resistant varieties perfect for commercial and residential planting.',
-        image: '/images/Fruit Seedlings 🌱.jpg',
-        features: ['Disease-resistant', 'High yield', 'Multiple varieties', 'Expert consultation']
+        name: 'Organic Apples',
+        category: 'Fruits',
+        description: 'Fresh, crunchy organic apples harvested directly from our orchards.',
+        image: '/images/Apples 🍎.jpg',
+        features: ['100% Organic', 'Fresh Harvest', 'Premium Grade']
     },
     {
         id: 2,
-        name: 'Natural Trees',
-        category: 'Trees',
-        description: 'Beautiful indigenous and exotic trees for landscaping and environmental projects. Enhance your property with mature, healthy trees.',
-        image: '/images/Plenty Seedlings 🌱.jpg',
-        features: ['Mature specimens', 'Native species', 'Shade trees', 'Ornamental varieties']
+        name: 'Sweet Bananas',
+        category: 'Fruits',
+        description: 'Hand-picked sweet bananas, perfect for retail and wholesale.',
+        image: '/images/Banana 🍌.jpg',
+        features: ['Naturally Ripened', 'Bulk Available', 'Nutrient Rich']
     },
     {
         id: 3,
-        name: 'Cement Blocks',
-        category: 'Construction Materials',
-        description: 'High-strength cement blocks manufactured to international standards. Perfect for residential and commercial construction projects.',
-        image: '/images/Bricks.jpg',
-        features: ['High compressive strength', 'Uniform dimensions', 'Durable', 'Cost-effective']
+        name: 'Premium Mangoes',
+        category: 'Fruits',
+        description: 'Large, juicy premium mangoes known for their superior taste and quality.',
+        image: '/images/Mango 🥭.jpg',
+        features: ['Juicy Texture', 'Sweet Aroma', 'High Quality']
     },
     {
         id: 4,
-        name: 'Culvert Rings',
-        category: 'Construction Materials',
-        description: 'Reinforced concrete culvert rings for drainage systems, septic tanks, and water management infrastructure.',
-        image: '/images/Modern Bricks.jpg',
-        features: ['Reinforced concrete', 'Various sizes', 'Weather-resistant', 'Long-lasting']
+        name: 'Fresh Oranges',
+        category: 'Fruits',
+        description: 'Vitamin-C rich oranges, perfect for juice production or direct consumption.',
+        image: '/images/Oranges 🍊.jpg',
+        features: ['High Juice Content', 'Thin Skin', 'Rich Flavor']
     },
     {
         id: 5,
-        name: 'Flowers & Plants',
-        category: 'Landscaping',
-        description: 'Vibrant flowers and ornamental plants to beautify your gardens, events, and outdoor spaces. Fresh, healthy, and carefully nurtured.',
-        image: '/images/Different seedlings 🌱.jpg',
-        features: ['Seasonal varieties', 'Event decoration', 'Garden plants', 'Custom arrangements']
-    }
+        name: 'Tropical Pineapples',
+        category: 'Fruits',
+        description: 'Sweet and tangy tropical pineapples grown in optimal conditions.',
+        image: '/images/Pineapples.jpg',
+        features: ['Sweet Flavor', 'Large Size', 'Freshly Picked']
+    },
+
+    // --- Seedlings & Young Trees ---
+    {
+        id: 6,
+        name: 'Fruit Tree Seedlings',
+        category: 'Seedlings',
+        description: 'Strong, healthy fruit tree seedlings ready for orchard planting.',
+        image: '/images/Fruit Seedlings 🌱.jpg',
+        features: ['Disease Resistant', 'Fast Growing', 'Draft Varieties']
+    },
+    {
+        id: 7,
+        name: 'Mango Seedlings',
+        category: 'Seedlings',
+        description: 'High-yield mango seedlings available in multiple varieties.',
+        image: '/images/Mango Seedings 🥭.jpg',
+        features: ['Uniform Growth', 'Grafted Options', 'High Yield']
+    },
+    {
+        id: 8,
+        name: 'Papaya Seedlings',
+        category: 'Seedlings',
+        description: 'Fast-fruiting papaya seedlings for commercial and home gardens.',
+        image: '/images/Papaya Seedlings 🌱.jpg',
+        features: ['Semi-Dwarf', 'Sweet Variety', 'Quick Harvest']
+    },
+    {
+        id: 9,
+        name: 'Banana Suckers',
+        category: 'Seedlings',
+        description: 'Healthy banana suckers from high-production mother plants.',
+        image: '/images/Nthochi.jpg',
+        features: ['Clean Material', 'Large Variety', 'Strong Roots']
+    },
+    {
+        id: 10,
+        name: 'Variety Seedlings Bundle',
+        category: 'Seedlings',
+        description: 'A mix of various vegetable and fruit seedlings for diverse farming.',
+        image: '/images/Multiple Varieties.jpg',
+        features: ['Diverse Selection', 'Cost Effective', 'Bulk Discounts']
+    },
+    {
+        id: 13,
+        name: 'Elite Seedling Stock',
+        category: 'Seedlings',
+        description: 'Carefully selected elite seedling stock for professional growers.',
+        image: '/images/Seedlingz.jpg',
+        features: ['Top Genetics', 'Vigorous Growth', 'Certified Quality']
+    },
+
+    // --- Construction Materials ---
+    {
+        id: 15,
+        name: 'Modern Design Bricks',
+        category: 'Construction Materials',
+        description: 'Aesthetic and functional modern bricks for high-end residential projects.',
+        image: '/images/Modern Bricks.jpg',
+        features: ['Smooth Finish', 'Uniform Color', 'Impact Resistant']
+    },
+    // {
+    //     id: 18,
+    //     name: 'Structural Bricks Type 2',
+    //     category: 'Construction Materials',
+    //     description: 'Heavy-duty bricks designed for load-bearing structures.',
+    //     image: '/images/Bricks 2.jpg',
+    //     features: ['Solid Core', 'High Compression', 'Reliable Build']
+    // },
+    {
+        id: 20,
+        name: 'Interlocking Blocks',
+        category: 'Construction Materials',
+        description: 'Efficient interlocking blocks for faster and more regular construction.',
+        image: '/images/Bricks 5.jpg',
+        features: ['Fast Build', 'Cost Saving', 'Strong Alignment']
+    },
+
 ];

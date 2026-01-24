@@ -27,7 +27,7 @@ const Gallery = () => {
             <div className="container mx-auto">
                 {/* Header */}
                 <div className="text-center mb-12 animate-fade-in text-reveal">
-                    <h1 className="text-secondary-800 mb-4 font-display">Project Excellence</h1>
+                    <h1 className="text-primary-800 mb-4 font-display">Project Excellence</h1>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                         Explore our portfolio of completed projects. From beautiful landscapes to solid infrastructure,
                         see the quality and craftsmanship that defines our work.

@@ -6,6 +6,7 @@ import { API_BASE } from '../config';
 const Products = () => {
     const [products, setProducts] = useState(staticProducts);
     const [loading, setLoading] = useState(true);
+    const [filter, setFilter] = useState('All');
 
     useEffect(() => {
         fetch(`${API_BASE}/products`)
@@ -22,24 +23,45 @@ const Products = () => {
             .finally(() => setLoading(false));
     }, []);
 
+    const categories = ['All', ...new Set(products.map(p => p.category))];
+    const filteredProducts = filter === 'All'
+        ? products
+        : products.filter(p => p.category === filter);
+
     return (
         <div className="section-padding">
             <div className="container mx-auto">
                 {/* Header */}
                 <div className="text-center mb-12 animate-fade-in text-reveal">
-                    <h1 className="text-secondary-800 mb-4 font-display">Our Premium Products</h1>
+                    <h1 className="text-primary-800 mb-4 font-display">Our Premium Products</h1>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                         Quality materials for every project. From beautiful trees to durable construction materials,
                         we provide everything you need to bring your vision to life.
                     </p>
                 </div>
 
+                {/* Filter Tabs */}
+                <div className="flex flex-wrap justify-center gap-3 mb-10">
+                    {categories.map((cat) => (
+                        <button
+                            key={cat}
+                            onClick={() => setFilter(cat)}
+                            className={`px-6 py-2 rounded-xl font-bold transition-all duration-300 ${filter === cat
+                                ? 'bg-primary-700 text-white shadow-lg scale-105'
+                                : 'glass text-gray-700 hover:bg-primary-50'
+                                }`}
+                        >
+                            {cat}
+                        </button>
+                    ))}
+                </div>
+
                 {/* Products Grid */}
                 {loading ? (
                     <div className="flex justify-center p-20"><div className="spinner"></div></div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {products.map((product) => (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]">
+                        {filteredProducts.map((product) => (
                             <ProductCard key={product._id || product.id} product={product} />
                         ))}
                     </div>

@@ -169,9 +169,9 @@ const BookingForm = () => {
                             ))
                         ) : (
                             <>
-                                <option value="bridge-construction">Bridge Construction</option>
-                                <option value="house-construction">Culvert & House Construction</option>
-                                <option value="landscaping">Landscaping & Garden Design</option>
+                                <option value="house-construction">House Construction</option>
+                                <option value="culvert-construction">Culvert Construction</option>
+                                <option value="landscaping">Landscaping & Gardening</option>
                             </>
                         )}
                         <option value="other">Other</option>

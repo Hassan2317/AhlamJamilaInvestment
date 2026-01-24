@@ -13,7 +13,8 @@ const Services = () => {
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    const dbServices = data.data;
+                    const blacklistedTitles = ['Culvert & House Construction', 'Bridge Construction', 'Landscaping & Garden Design'];
+                    const dbServices = data.data.filter(s => !blacklistedTitles.includes(s.title));
                     const dbTitles = new Set(dbServices.map(s => s.title));
                     const uniqueStatic = staticServices.filter(s => !dbTitles.has(s.name));
                     setServices([...dbServices.map(s => ({ ...s, name: s.title })), ...uniqueStatic]);
