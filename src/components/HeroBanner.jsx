@@ -107,35 +107,19 @@ const HeroBanner = () => {
                     <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30" />
 
                     {/* Content */}
-                    <div className="absolute inset-0 flex items-center justify-center text-center px-4">
+                    <div className="absolute inset-0 flex items-center justify-start px-8 md:px-16 lg:px-24 text-left">
                         <div className="max-w-4xl animate-fade-in">
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 font-display drop-shadow-lg">
+                            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 font-display drop-shadow-2xl leading-tight">
                                 {slide.title}
                             </h1>
-                            <p className="text-xl md:text-2xl text-gray-200 mb-8 drop-shadow-md">
-                                {slide.subtitle}
-                            </p>
+                            <div className="relative">
+                                <div className="absolute left-0 top-0 bottom-0 w-1 bg-accent-400 rounded-full shadow-[0_0_15px_rgba(251,191,36,0.6)]" />
+                                <p className="text-xl md:text-2xl lg:text-3xl text-gray-200 drop-shadow-lg leading-relaxed pl-6">
+                                    {slide.subtitle}
+                                </p>
+                            </div>
 
-                            {slide.buttons ? (
-                                <div className="flex flex-wrap justify-center gap-4">
-                                    {slide.buttons.map((btn, i) => (
-                                        <Link
-                                            key={i}
-                                            to={btn.link}
-                                            className={`inline-block ${btn.color} text-white font-bold py-3 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl`}
-                                        >
-                                            {btn.text}
-                                        </Link>
-                                    ))}
-                                </div>
-                            ) : (
-                                <Link
-                                    to={slide.link}
-                                    className="inline-block bg-accent-700 hover:bg-accent-800 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl"
-                                >
-                                    {slide.cta}
-                                </Link>
-                            )}
+
                         </div>
                     </div>
                 </div>
