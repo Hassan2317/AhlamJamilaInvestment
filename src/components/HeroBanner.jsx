@@ -14,7 +14,6 @@ const HeroBanner = () => {
             buttons: [
                 { text: 'Products', link: '/products', color: 'bg-green-600 hover:bg-green-700' },
                 { text: 'Services', link: '/services', color: 'bg-green-600 hover:bg-green-700' },
-                { text: 'Gallery', link: '/gallery', color: 'bg-green-600 hover:bg-green-700' }
             ]
         },
         /*
@@ -143,6 +142,7 @@ const HeroBanner = () => {
             ))}
 
             {/* Navigation Arrows */}
+            {/* 
             <button
                 onClick={prevSlide}
                 className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-300"
@@ -157,6 +157,7 @@ const HeroBanner = () => {
             >
                 <FaChevronRight className="text-2xl" />
             </button>
+             */}
 
             {/* Indicators */}
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-2">
