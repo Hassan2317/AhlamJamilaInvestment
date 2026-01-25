@@ -7,36 +7,54 @@ const HeroBanner = () => {
 
     const slides = [
         {
-            image: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1200',
+            type: 'video',
+            video: 'https://www.pexels.com/download/video/26707469/',
+            title: 'Welcome to Ahlam Jamila Investment',
+            subtitle: 'Your partner in Construction, Agriculture and Landscaping',
+            buttons: [
+                { text: 'Products', link: '/products', color: 'bg-green-600 hover:bg-green-700' },
+                { text: 'Services', link: '/services', color: 'bg-green-600 hover:bg-green-700' },
+                { text: 'Gallery', link: '/gallery', color: 'bg-green-600 hover:bg-green-700' }
+            ]
+        },
+        /*
+        {
+            type: 'image',
+            image: 'https://images.pexels.com/photos/7174/summer-grass.jpg',
             title: 'Building Dreams, Growing Futures',
             subtitle: 'Quality agricultural and construction solutions',
             cta: 'Explore Products',
             link: '/products'
         },
         {
-            image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1200',
+            type: 'image',
+            image: 'https://images.pexels.com/photos/11573787/pexels-photo-11573787.jpeg',
             title: 'Premium Trees & Plants',
             subtitle: 'Orchard trees, natural trees, and beautiful flowers',
             cta: 'View Products',
             link: '/products'
         },
         {
-            image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1200',
+            type: 'image',
+            image: 'https://images.pexels.com/photos/19688828/pexels-photo-19688828.jpeg',
             title: 'Professional Construction Services',
             subtitle: 'Bridges, houses, and culvert systems',
             cta: 'Our Services',
             link: '/services'
         },
         {
+            type: 'image',
             image: 'https://images.unsplash.com/photo-1558904541-efa843a96f01?w=1200',
             title: 'Transform Your Outdoor Space',
             subtitle: 'Expert landscaping and garden design',
             cta: 'Book Now',
             link: '/booking'
         }
+        */
     ];
 
     useEffect(() => {
+        if (slides.length <= 1) return; // Don't cycle if only one slide
         const timer = setInterval(() => {
             setCurrentSlide((prev) => (prev + 1) % slides.length);
         }, 5000);
@@ -45,10 +63,12 @@ const HeroBanner = () => {
     }, [slides.length]);
 
     const nextSlide = () => {
+        if (slides.length <= 1) return;
         setCurrentSlide((prev) => (prev + 1) % slides.length);
     };
 
     const prevSlide = () => {
+        if (slides.length <= 1) return;
         setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
     };
 
@@ -61,11 +81,30 @@ const HeroBanner = () => {
                     className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'
                         }`}
                 >
-                    <img
-                        src={slide.image}
-                        alt={slide.title}
-                        className="w-full h-full object-cover"
-                    />
+                    {slide.type === 'video' ? (
+                        <div className="w-full h-full relative">
+                            {/* Fallback image or blank background while loading can be added here if needed */}
+                            <video
+                                src={slide.video}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                className="w-full h-full object-cover"
+                                onTimeUpdate={(e) => {
+                                    if (e.target.currentTime >= 5) {
+                                        e.target.currentTime = 0;
+                                    }
+                                }}
+                            />
+                        </div>
+                    ) : (
+                        <img
+                            src={slide.image}
+                            alt={slide.title}
+                            className="w-full h-full object-cover"
+                        />
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30" />
 
                     {/* Content */}
@@ -77,12 +116,27 @@ const HeroBanner = () => {
                             <p className="text-xl md:text-2xl text-gray-200 mb-8 drop-shadow-md">
                                 {slide.subtitle}
                             </p>
-                            <Link
-                                to={slide.link}
-                                className="inline-block bg-accent-700 hover:bg-accent-800 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl"
-                            >
-                                {slide.cta}
-                            </Link>
+
+                            {slide.buttons ? (
+                                <div className="flex flex-wrap justify-center gap-4">
+                                    {slide.buttons.map((btn, i) => (
+                                        <Link
+                                            key={i}
+                                            to={btn.link}
+                                            className={`inline-block ${btn.color} text-white font-bold py-3 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl`}
+                                        >
+                                            {btn.text}
+                                        </Link>
+                                    ))}
+                                </div>
+                            ) : (
+                                <Link
+                                    to={slide.link}
+                                    className="inline-block bg-accent-700 hover:bg-accent-800 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl"
+                                >
+                                    {slide.cta}
+                                </Link>
+                            )}
                         </div>
                     </div>
                 </div>
