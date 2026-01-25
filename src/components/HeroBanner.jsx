@@ -11,10 +11,10 @@ const HeroBanner = () => {
             video: '/videos/hero-video.mp4',
             title: 'Welcome to Ahlam Jamila Inv.',
             subtitle: 'Your partner in Construction, Agriculture and Landscaping',
-            buttons: [
-                { text: 'Products', link: '/products', color: 'bg-green-600 hover:bg-green-700' },
-                { text: 'Services', link: '/services', color: 'bg-green-600 hover:bg-green-700' },
-            ]
+            // buttons: [
+            //     { text: 'Products', link: '/products', color: 'bg-green-600 hover:bg-green-700' },
+            //     { text: 'Services', link: '/services', color: 'bg-green-600 hover:bg-green-700' },
+            // ]
         },
         /*
         {
