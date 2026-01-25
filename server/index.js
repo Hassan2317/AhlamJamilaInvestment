@@ -45,7 +45,7 @@ app.post('/api/contact', async (req, res) => {
         // 2. Send Email via Resend
         const data = await resend.emails.send({
             from: 'onboarding@resend.dev', // Use this for testing/free tier
-            to: [process.env.BUSINESS_EMAIL, 'ahlamjamilainvestiment@gmail.com', 'phwataabdul@gmail.com'],
+            to: process.env.BUSINESS_EMAIL,
             subject: `New Contact Form Submission: ${subject}`,
             reply_to: email, // Allow replying directly to the user
             html: `
@@ -80,7 +80,7 @@ app.post('/api/booking', async (req, res) => {
         // 2. Send Email via Resend
         const data = await resend.emails.send({
             from: 'onboarding@resend.dev', // Use this for testing/free tier
-            to: [process.env.BUSINESS_EMAIL, 'ahlamjamilainvestiment@gmail.com', 'phwataabdul@gmail.com', 'zaminhassan47@gmail.com', 'bsc-44-21@unima.ac.mw'],
+            to: process.env.BUSINESS_EMAIL,
             subject: `New Service Booking: ${service}`,
             reply_to: email,
             html: `
