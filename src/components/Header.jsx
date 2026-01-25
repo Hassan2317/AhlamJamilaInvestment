@@ -29,10 +29,12 @@ const Header = () => {
                             <FaLeaf className="text-white text-2xl" />
                         </div>
                         <div>
-                            <h1 className="text-xl md:text-2xl font-bold text-primary-800 font-display">
+                            <h1 className="text-xl md:text-2xl font-bold text-primary-800 font-display leading-tight">
                                 Ahlam Jamila
                             </h1>
-                            <p className="text-xs text-gray-600 hidden md:block">Investment</p>
+                            <p className="text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] text-accent-400">
+                                Investment
+                            </p>
                         </div>
                     </Link>
 
