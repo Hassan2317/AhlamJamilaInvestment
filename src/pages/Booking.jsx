@@ -71,8 +71,8 @@ const Booking = () => {
                                 <div className="flex items-center gap-3">
                                     <FaPhone className="text-accent-400" />
                                     <div className="flex flex-col text-sm">
-                                        <a href="tel:0999007432" className="hover:text-accent-400 transition-colors">0999007432</a>
-                                        <a href="tel:0990119138" className="hover:text-accent-400 transition-colors">0990119138</a>
+                                        <a href="tel:+265999007432" className="hover:text-accent-400 transition-colors">+265 999 007 432</a>
+                                        <a href="tel:+265990119138" className="hover:text-accent-400 transition-colors">+265 990 119 138</a>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3">
