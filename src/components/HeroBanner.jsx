@@ -9,7 +9,7 @@ const HeroBanner = () => {
         {
             type: 'video',
             video: 'https://www.pexels.com/download/video/26707469/',
-            title: 'Welcome to Ahlam Jamila Investment',
+            title: 'Welcome to Ahlam Jamila Inv.',
             subtitle: 'Your partner in Construction, Agriculture and Landscaping',
             buttons: [
                 { text: 'Products', link: '/products', color: 'bg-green-600 hover:bg-green-700' },
