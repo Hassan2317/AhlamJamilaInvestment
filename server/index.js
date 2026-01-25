@@ -59,7 +59,7 @@ app.post('/api/contact', async (req, res) => {
         });
 
         console.log('Email sent:', data);
-        res.status(200).json({ success: true, message: 'Message sent and saved successfully!' });
+        res.status(200).json({ success: true, message: 'Message sent successfully!' });
     } catch (error) {
         console.error('Error handling contact form:', error);
         res.status(500).json({ success: false, message: 'Process failed. Please try again.' });
