@@ -8,7 +8,7 @@ const HeroBanner = () => {
     const slides = [
         {
             type: 'video',
-            video: 'https://www.pexels.com/download/video/26707469/',
+            video: '/videos/hero-video.mp4',
             title: 'Welcome to Ahlam Jamila Inv.',
             subtitle: 'Your partner in Construction, Agriculture and Landscaping',
             buttons: [
