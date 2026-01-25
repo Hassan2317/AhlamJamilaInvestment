@@ -70,11 +70,17 @@ const Booking = () => {
                             <div className="space-y-4">
                                 <div className="flex items-center gap-3">
                                     <FaPhone className="text-accent-400" />
-                                    <a href="tel:+265994454221" className="hover:text-accent-400 transition-colors">+265 994 454 221</a>
+                                    <div className="flex flex-col text-sm">
+                                        <a href="tel:0999007432" className="hover:text-accent-400 transition-colors">0999007432</a>
+                                        <a href="tel:0990119138" className="hover:text-accent-400 transition-colors">0990119138</a>
+                                    </div>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <FaEnvelope className="text-accent-400" />
-                                    <a href="mailto:zaminhassan2317@gmail.com" className="hover:text-accent-400 transition-colors break-all text-xs">zaminhassan2317@gmail.com</a>
+                                    <div className="flex flex-col text-sm">
+                                        <a href="mailto:ahlamjamilainvestiment@gmail.com" className="hover:text-accent-400 transition-colors break-all text-xs">ahlamjamilainvestiment@gmail.com</a>
+                                        <a href="mailto:phwataabdul@gmail.com" className="hover:text-accent-400 transition-colors break-all text-xs">phwataabdul@gmail.com</a>
+                                    </div>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <FaClock className="text-accent-400" />

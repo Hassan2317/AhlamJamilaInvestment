@@ -93,19 +93,25 @@ const Footer = () => {
                         <ul className="space-y-2">
                             <li className="flex items-start space-x-3 text-gray-400">
                                 <FaMapMarkerAlt className="text-accent-500 mt-1 flex-shrink-0" />
-                                <span className="text-sm">Zomba, Malawi</span>
+                                <span className="text-sm">Nkhotakota, near Taba Masjid</span>
                             </li>
                             <li className="flex items-center space-x-3 text-gray-400">
                                 <FaPhone className="text-accent-500 flex-shrink-0" />
-                                <a href="tel:+265994454221" className="text-sm hover:text-accent-400 transition-colors">
-                                    +265 994 454 221
-                                </a>
+                                <div className="flex flex-col text-sm">
+                                    <a href="tel:0999007432" className="hover:text-accent-400 transition-colors">+265 999 007 432</a>
+                                    <a href="tel:0990119138" className="hover:text-accent-400 transition-colors">+265 990 119 138</a>
+                                </div>
                             </li>
                             <li className="flex items-center space-x-3 text-gray-400">
                                 <FaEnvelope className="text-accent-500 flex-shrink-0" />
-                                <a href="mailto:zaminhassan2317@gmail.com" className="text-sm hover:text-accent-400 transition-colors break-all">
-                                    zaminhassan2317@gmail.com
-                                </a>
+                                <div className="flex flex-col text-sm">
+                                    <a href="mailto:ahlamjamilainvestiment@gmail.com" className="hover:text-accent-400 transition-colors break-all">
+                                        ahlamjamilainvestiment@gmail.com
+                                    </a>
+                                    <a href="mailto:phwataabdul@gmail.com" className="hover:text-accent-400 transition-colors break-all">
+                                        phwataabdul@gmail.com
+                                    </a>
+                                </div>
                             </li>
                         </ul>
                     </div>
