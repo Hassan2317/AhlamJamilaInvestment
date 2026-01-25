@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend'); // Import Resend
 const mongoose = require('mongoose');
 const path = require('path');
 const Booking = require('./models/Booking');
@@ -12,6 +12,9 @@ require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Initialize Resend
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Middleware
 app.use(cors());
@@ -25,26 +28,6 @@ mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Could not connect to MongoDB:', err));
 
-// Nodemailer Transporter
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // Use STARTTLS
-    auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS
-    },
-    tls: {
-        rejectUnauthorized: false
-    },
-    family: 4, // Force IPv4
-    connectionTimeout: 10000, // 10 seconds
-    greetingTimeout: 5000,
-    socketTimeout: 10000,
-    logger: true,
-    debug: true
-});
-
 // Routes
 app.get('/', (req, res) => {
     res.send('Ahlam Jamila Investment Backend is running!');
@@ -54,26 +37,28 @@ app.get('/', (req, res) => {
 app.post('/api/contact', async (req, res) => {
     const { name, email, subject, message } = req.body;
 
-    const mailOptions = {
-        from: process.env.SMTP_USER,
-        to: process.env.BUSINESS_EMAIL,
-        subject: `New Contact Form Submission: ${subject}`,
-        text: `
-            Name: ${name}
-            Email: ${email}
-            Subject: ${subject}
-            Message: ${message}
-        `
-    };
-
     try {
         // 1. Save to Database
         const newContact = new Contact({ name, email, subject, message });
         await newContact.save();
 
-        // 2. Send Email
-        await transporter.sendMail(mailOptions);
+        // 2. Send Email via Resend
+        const data = await resend.emails.send({
+            from: 'onboarding@resend.dev', // Use this for testing/free tier
+            to: process.env.BUSINESS_EMAIL,
+            subject: `New Contact Form Submission: ${subject}`,
+            reply_to: email, // Allow replying directly to the user
+            html: `
+                <h3>New Contact Message</h3>
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Subject:</strong> ${subject}</p>
+                <p><strong>Message:</strong></p>
+                <p>${message}</p>
+            `
+        });
 
+        console.log('Email sent:', data);
         res.status(200).json({ success: true, message: 'Message sent and saved successfully!' });
     } catch (error) {
         console.error('Error handling contact form:', error);
@@ -85,20 +70,6 @@ app.post('/api/contact', async (req, res) => {
 app.post('/api/booking', async (req, res) => {
     const { name, email, phone, service, date, details } = req.body;
 
-    const mailOptions = {
-        from: process.env.SMTP_USER,
-        to: process.env.BUSINESS_EMAIL,
-        subject: `New Service Booking: ${service}`,
-        text: `
-            Name: ${name}
-            Email: ${email}
-            Phone: ${phone}
-            Service: ${service}
-            Preferred Date: ${date}
-            Details: ${details}
-        `
-    };
-
     try {
         // 1. Save to Database
         const newBooking = new Booking({
@@ -106,9 +77,24 @@ app.post('/api/booking', async (req, res) => {
         });
         await newBooking.save();
 
-        // 2. Send Email
-        await transporter.sendMail(mailOptions);
+        // 2. Send Email via Resend
+        const data = await resend.emails.send({
+            from: 'onboarding@resend.dev', // Use this for testing/free tier
+            to: process.env.BUSINESS_EMAIL,
+            subject: `New Service Booking: ${service}`,
+            reply_to: email,
+            html: `
+                <h3>New Booking Request</h3>
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Phone:</strong> ${phone}</p>
+                <p><strong>Service:</strong> ${service}</p>
+                <p><strong>Preferred Date:</strong> ${date}</p>
+                <p><strong>Details:</strong> ${details}</p>
+            `
+        });
 
+        console.log('Booking email sent:', data);
         res.status(200).json({ success: true, message: 'Booking request sent and saved successfully!' });
     } catch (error) {
         console.error('Error handling booking request:', error);
