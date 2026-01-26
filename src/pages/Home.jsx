@@ -97,9 +97,9 @@ const Home = () => {
             <section className="section-padding bg-white/30 reveal">
                 <div className="container mx-auto">
                     <div className="max-w-4xl mx-auto text-center mb-12">
-                        <h2 className="text-primary-800 mb-4 font-display">About Ahlam Jamila Investment</h2>
+                        <h2 className="text-primary-800 mb-4 font-display">About Ahlam Jamila Inv.</h2>
                         <p className="text-lg text-gray-700 leading-relaxed">
-                            We are a diversified company with 15+ years of experience, providing premium agricultural products, construction materials, and expert landscaping services—from orchard trees and flowers to cement blocks, culverts, bridges, houses, and outdoor designs.
+                            We are a diversified company with 15+ years of experience, providing premium agricultural products, construction materials, and expert landscaping services from orchard trees and flowers to cement blocks, culverts, bridges, houses, and outdoor designs.
                         </p>
                     </div>
 
