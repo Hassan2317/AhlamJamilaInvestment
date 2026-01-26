@@ -99,10 +99,7 @@ const Home = () => {
                     <div className="max-w-4xl mx-auto text-center mb-12">
                         <h2 className="text-primary-800 mb-4 font-display">About Ahlam Jamila Investment</h2>
                         <p className="text-lg text-gray-700 leading-relaxed">
-                            We are a diversified company specializing in high-quality agricultural and construction products and services.
-                            With over 15 years of experience, we supply premium orchard trees, natural trees, cement blocks, culvert rings,
-                            and beautiful flowers. Our expert team also provides professional construction and landscaping services including
-                            building bridges, culverts, houses, and designing stunning outdoor spaces.
+                            We are a diversified company with 15+ years of experience, providing premium agricultural products, construction materials, and expert landscaping services—from orchard trees and flowers to cement blocks, culverts, bridges, houses, and outdoor designs.
                         </p>
                     </div>
 
