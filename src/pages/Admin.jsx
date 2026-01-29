@@ -24,14 +24,25 @@ const Admin = () => {
     const [editId, setEditId] = useState(null);
     const [uploading, setUploading] = useState(false);
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        if (password === 'Yatim2317') {
-            setIsAuthenticated(true);
-            setError('');
-            sessionStorage.setItem('adminKey', password);
-        } else {
-            setError('Invalid password');
+        try {
+            const res = await fetch(`${ADMIN_API}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password })
+            });
+            const data = await res.json();
+            if (data.success) {
+                setIsAuthenticated(true);
+                setError('');
+                sessionStorage.setItem('adminKey', password);
+            } else {
+                setError('Invalid password');
+            }
+        } catch (err) {
+            console.error('Login error:', err);
+            setError('Login failed. Please try again later.');
         }
     };
 

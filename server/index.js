@@ -118,6 +118,16 @@ const adminAuth = (req, res, next) => {
     }
 };
 
+// Admin Login Verification
+app.post('/api/admin/login', (req, res) => {
+    const { password } = req.body;
+    if (password === process.env.ADMIN_PASSWORD) {
+        res.json({ success: true });
+    } else {
+        res.status(401).json({ success: false, message: 'Invalid password' });
+    }
+});
+
 // GET all bookings
 app.get('/api/admin/bookings', adminAuth, async (req, res) => {
     try {
