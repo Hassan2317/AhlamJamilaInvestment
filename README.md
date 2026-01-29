@@ -83,6 +83,6 @@ This project is configured to be served as a unified package.
 ---
 
 ### 📞 Contact & Support
-For any inquiries regarding the platform, please contact **Zamin Hassan** at [zaminhassan2317@gmail.com](mailto:zaminhassan2317@gmail.com).
+For any inquiries regarding the platform, please contact **Ahlam Jamila Investment** at [ahlamjamilainvestiment@gmail.com](mailto:ahlamjamilainvestiment@gmail.com).
 
 © 2024 Ahlam Jamila Investment. All rights reserved.

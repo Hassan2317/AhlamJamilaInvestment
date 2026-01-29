@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { Resend } = require('resend'); // Import Resend
+const nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
 const path = require('path');
 const Booking = require('./models/Booking');
@@ -13,8 +13,14 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Initialize Resend
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Nodemailer Transporter
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+    }
+});
 
 // Middleware
 app.use(cors());
@@ -42,12 +48,12 @@ app.post('/api/contact', async (req, res) => {
         const newContact = new Contact({ name, email, subject, message });
         await newContact.save();
 
-        // 2. Send Email via Resend
-        const data = await resend.emails.send({
-            from: 'onboarding@resend.dev', // Use this for testing/free tier
+        // 2. Send Email via Nodemailer
+        const mailOptions = {
+            from: process.env.SMTP_USER,
             to: process.env.BUSINESS_EMAIL,
             subject: `New Contact Form Submission: ${subject}`,
-            reply_to: email, // Allow replying directly to the user
+            replyTo: email,
             html: `
                 <h3>New Contact Message</h3>
                 <p><strong>Name:</strong> ${name}</p>
@@ -56,9 +62,10 @@ app.post('/api/contact', async (req, res) => {
                 <p><strong>Message:</strong></p>
                 <p>${message}</p>
             `
-        });
+        };
 
-        console.log('Email sent:', data);
+        await transporter.sendMail(mailOptions);
+        console.log('Contact email sent successfully');
         res.status(200).json({ success: true, message: 'Message sent successfully!' });
     } catch (error) {
         console.error('Error handling contact form:', error);
@@ -77,12 +84,12 @@ app.post('/api/booking', async (req, res) => {
         });
         await newBooking.save();
 
-        // 2. Send Email via Resend
-        const data = await resend.emails.send({
-            from: 'onboarding@resend.dev', // Use this for testing/free tier
+        // 2. Send Email via Nodemailer
+        const mailOptions = {
+            from: process.env.SMTP_USER,
             to: process.env.BUSINESS_EMAIL,
             subject: `New Service Booking: ${service}`,
-            reply_to: email,
+            replyTo: email,
             html: `
                 <h3>New Booking Request</h3>
                 <p><strong>Name:</strong> ${name}</p>
@@ -92,9 +99,10 @@ app.post('/api/booking', async (req, res) => {
                 <p><strong>Preferred Date:</strong> ${date}</p>
                 <p><strong>Details:</strong> ${details}</p>
             `
-        });
+        };
 
-        console.log('Booking email sent:', data);
+        await transporter.sendMail(mailOptions);
+        console.log('Booking email sent successfully');
         res.status(200).json({ success: true, message: 'Booking request sent successfully!' });
     } catch (error) {
         console.error('Error handling booking request:', error);

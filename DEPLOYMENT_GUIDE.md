@@ -30,10 +30,10 @@ Go to the **Environment** tab in your Render dashboard and add these key-values:
 | :--- | :--- |
 | `NODE_VERSION` | `22.0.0` |
 | `MONGODB_URI` | *Your MongoDB Atlas connection string* |
-| `SMTP_USER` | `zaminhassan2317@gmail.com` |
+| `SMTP_USER` | `ahlamjamilainvestiment@gmail.com` |
 | `SMTP_PASS` | *Your Google App Password* |
 | `ADMIN_PASSWORD` | `Yatim2317` |
-| `BUSINESS_EMAIL` | `zaminhassan2317@gmail.com` |
+| `BUSINESS_EMAIL` | `ahlamjamilainvestiment@gmail.com` |
 
 ## 5. Verify the Deploy
 1. Render will start the build process. Once it says **"Live"**, click the URL provided at the top.
