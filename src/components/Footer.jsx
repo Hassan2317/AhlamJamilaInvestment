@@ -36,13 +36,13 @@ const Footer = () => {
                             Building dreams and growing futures with quality agricultural and construction products and services across Malawi.
                         </p>
                         <div className="flex space-x-3">
-                            <a href="#" className="bg-primary-600 hover:bg-primary-700 p-2 rounded-lg transition-all duration-300 hover:-translate-y-1">
+                            <a href="https://www.facebook.com/profile.php?id=61572544401558" className="bg-primary-600 hover:bg-primary-700 p-2 rounded-lg transition-all duration-300 hover:-translate-y-1">
                                 <FaFacebook className="text-white" />
                             </a>
                             <a href="#" className="bg-primary-600 hover:bg-primary-700 p-2 rounded-lg transition-all duration-300 hover:-translate-y-1">
                                 <FaTwitter className="text-white" />
                             </a>
-                            <a href="#" className="bg-primary-600 hover:bg-primary-700 p-2 rounded-lg transition-all duration-300 hover:-translate-y-1">
+                            <a href="https://www.instagram.com/ahlam_jamilainvestment?utm_source=qr&igsh=MWlmeHI1ZmZheGRnMQ==" className="bg-primary-600 hover:bg-primary-700 p-2 rounded-lg transition-all duration-300 hover:-translate-y-1">
                                 <FaInstagram className="text-white" />
                             </a>
                             <a href="#" className="bg-primary-600 hover:bg-primary-700 p-2 rounded-lg transition-all duration-300 hover:-translate-y-1">
